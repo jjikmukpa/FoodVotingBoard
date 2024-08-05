@@ -13,7 +13,7 @@ spring:
 #      hibernate:
 #        format_sql: true
   jpa:
-    generate-ddl: false
+    generate-ddl: true
     show-sql: true
     database: mysql
     properties:

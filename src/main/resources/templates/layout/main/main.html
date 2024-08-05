@@ -1,45 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>음식게시판</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 </head>
-<body style="background-color: #e3e17b">
-<!--    <header th:replace="~{/common/header :: headerFragment}">-->
+<body>
+<header th:replace="~{/fragments/header :: header}">
 
-<!--    </header>-->
+</header>
 
-<!--    <main class="main">-->
-<!--        <article>-->
-<!--            <section>-->
-<!--                <h1>메인!!</h1>-->
-<!--            </section>-->
-<!--        </article>-->
-<!--    </main>-->
-
-<h1>🍔 음식 게시판 🥙</h1>
-
-<div>
-    <a sec:authorize="isAnonymous()" th:href="@{/auth/login}">로그인</a>
-    <span sec:authorize="isAnonymous()"> | </span>
-    <a sec:authorize="isAnonymous()" th:href="@{/member/register}">회원가입</a>
-</div>
-
-<div sec:authorize="isAuthenticated()">
-    <a>[[| ${#authentication.principal.member.memberId} 님 환영합니다. |]]</a>
-</div>
-
-<div sec:authorize="isAuthenticated()">
-    <form th:action="@{/auth/logout}" method="post">
-        <button>Logout</button>
-    </form>
-</div>
-
-<div sec:authorize="isAuthenticated()">
-    <a th:href="@{/post/post}">Post</a>
-</div>
-<div sec:authorize="hasRole('ADMIN')">
-    <a th:href="@{/admin/admin}">Admin</a>
-</div>
+<main class="main">
+    <h2>메인!!</h2>
+</main>
 </body>
 </html>
+
