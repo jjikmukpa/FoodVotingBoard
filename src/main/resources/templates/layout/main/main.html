@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>음식게시판</title>
+</head>
+<body style="background-color: #e3e17b">
+<!--    <header th:replace="~{/common/header :: headerFragment}">-->
+
+<!--    </header>-->
+
+<!--    <main class="main">-->
+<!--        <article>-->
+<!--            <section>-->
+<!--                <h1>메인!!</h1>-->
+<!--            </section>-->
+<!--        </article>-->
+<!--    </main>-->
+
+<h1>🍔 음식 게시판 🥙</h1>
+
+<div>
+    <a sec:authorize="isAnonymous()" th:href="@{/auth/login}">로그인</a>
+    <span sec:authorize="isAnonymous()"> | </span>
+    <a sec:authorize="isAnonymous()" th:href="@{/member/register}">회원가입</a>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <a>[[| ${#authentication.principal.member.memberId} 님 환영합니다. |]]</a>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <form th:action="@{/auth/logout}" method="post">
+        <button>Logout</button>
+    </form>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/post/post}">Post</a>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <a th:href="@{/admin/admin}">Admin</a>
+</div>
+</body>
+</html>
