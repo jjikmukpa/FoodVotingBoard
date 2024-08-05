@@ -1,0 +1,39 @@
+body{
+    font-family: "Black Han Sans", serif;
+    background-color: #ffd130;
+}
+header{
+    display: flex; /* Flexbox 활성화 */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: space-between; /* 요소 간 간격 균등 분배 */
+    background-color: #f9ed89; /* 배경색 지정 */
+}
+
+#logo {
+    color: black;
+    text-align: center;
+    height: 10vh;
+    position: relative;
+}
+
+#login_menu{
+    margin-right: 25px;
+    color: black;
+}
+#menubar{
+    margin-left: 25px;
+    cursor: pointer;
+    width: 25px;
+    height: 30px;
+    position: relative;
+    margin-right: 20px;
+}
+.bar{
+    width: 30px;
+    height: 5px;
+    background-color: black;
+    margin: 5px 3px;
+}
+.main{
+
+}
