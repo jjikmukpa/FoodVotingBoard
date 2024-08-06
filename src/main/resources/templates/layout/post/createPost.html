@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>음식 게시판 글쓰기</title>
+</head>
+<body>
+<h1>음식 게시판 글쓰기</h1>
+
+<form th:action="@{/post/create}" method="post">
+    <div>
+        <label for="postTitle">Title:</label>
+        <input type="text" id="postTitle" name="postTitle" required>
+    </div>
+    <div>
+        <label for="content">Content:</label>
+        <input type="text" id="content" name="content" required>
+    </div>
+    </div>
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

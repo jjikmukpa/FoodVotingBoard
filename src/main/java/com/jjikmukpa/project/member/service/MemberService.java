@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,4 +38,13 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
     }
+
+    public Member findMemberById(String memberId) {
+        Member member = memberRepository.findMemberByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("회원을 찾을 수 없습니다."));
+
+        return member;
+    }
+
+
 }

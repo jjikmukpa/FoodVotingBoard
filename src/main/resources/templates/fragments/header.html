@@ -31,7 +31,7 @@
         </div>
 
         <div sec:authorize="isAuthenticated()">
-            <a th:href="@{/post/post}">Post</a>
+            <a th:href="@{/post/post}">User</a>
         </div>
         <div sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin/admin}">Admin</a>

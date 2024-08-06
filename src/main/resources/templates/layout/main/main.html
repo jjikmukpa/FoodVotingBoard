@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>음식게시판</title>
@@ -10,12 +10,16 @@
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}">
-
 </header>
 
 <main class="main">
     <h2>메인!!</h2>
 </main>
+<div>
+    <button type="button" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>
+
+
+</div>
 </body>
 </html>
 
