@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,9 +17,18 @@ public class WebSecurityConfig {
     // CSS, JS, 이미지 같은 정적 자원들에 대해 보안 필터를 적용하지 않게 함
     @Bean
     public WebSecurityCustomizer securityCustomizer(){
-        return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return new WebSecurityCustomizer() {
+            @Override
+            public void customize(WebSecurity web) {
+                web.ignoring().requestMatchers("/css/**", "/js/**", "/image/**");
+            }
+        };
     }
+//    이미지 적용이 안 돼서 아래 코드에서 위 코드로 변경함
+//            return (web) -> web.ignoring()
+//            .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+
+
 
     // Spring Security에서 제공하는 인증, 인가를 위한 필터들의 모음
     // 기본적으로 제공하는 필터들이 있고, 커스텀 필터 또한 적용시킬 수 있다.
