@@ -1,24 +1,24 @@
 #text_food{
     text-align: center;
-    font-size: 65px;
+    font-size: 75px;
 }
 
 .main_btn1, .main_btn2 {
     position: absolute;
-    bottom: 50%; /* 아래쪽 여백 조정 */
+    bottom: 40%; /* 아래쪽 여백 조정 */
     right: 5%; /* 오른쪽 여백 조정 */
     padding: 8px 90px; /* 버튼 내부 여백 조정 */
     background-color: #fdf8cc;
     color: #000000;
     border: none;
     border-radius: 50px;
-    font-size: 40px;
+    font-size: 60px;
     font-family: "Black Han Sans", serif;
     margin: 5% 0;
     transition: background-color 0.3s, transform 0.2s;
 }
 .main_btn2 {
-    bottom: 40%; /* 두 번째 버튼이 첫 번째 버튼 위에 위치하도록 조정 */
+    bottom: 25%; /* 두 번째 버튼이 첫 번째 버튼 위에 위치하도록 조정 */
 }
 
 /* 버튼 클릭 시 효과 */
@@ -34,7 +34,6 @@
 }
 
 #main_image{
-    padding-top: 1%;
-    width: 70%;
-    height: 70%;
+    width: 55%;
+    height: 55%;
 }

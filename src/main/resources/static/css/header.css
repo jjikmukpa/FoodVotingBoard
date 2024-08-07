@@ -33,11 +33,31 @@ header{
     cursor: pointer; /* 커서를 포인터로 변경 */
 }
 
-.login_menu1, .login_menu2{
+.login_menu1, .login_menu2, #login_Success, #logout{
     text-decoration: none;
     color: black;
     font-size: large;
 }
+
+.logout{
+    display: flex;
+}
+
+#logout_button {
+    font-family: "Black Han Sans", serif;
+    background: none;
+    border: none;
+    color: black;
+    font-size: large;
+    cursor: pointer;
+    padding: 0;
+    float: right;
+}
+
+#logout_button:hover {
+    color: #0ba3f5; /* 호버 시 색상 변경 */
+}
+
 #menubar{
     cursor: pointer;
     width: 28px;
@@ -61,7 +81,7 @@ header{
     height: 100%;
     background-color: #f5a50b;
     transition: left 0.3s ease; /* 애니메이션 효과 */
-    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    box-shadow: 1px 0 3px rgba(0,0,0,0.5);
     padding-top: 60px; /* 헤더 높이만큼 패딩 */
 }
 
@@ -81,6 +101,20 @@ header{
     text-decoration: none;
     display: block;
 }
+
+/* 새로 추가된 부분 */
+#my_page::after {
+    content: '➤'; /* 기본 기호 */
+    display: inline-block;
+    margin-left: 5px;
+    transition: transform 0.3s ease, content 0.3s ease; /* 부드러운 회전 애니메이션 */
+}
+
+#my_page:hover::after{
+    content: '▼'; /* 호버 시 기호 변경 */
+    transform: rotate(120deg) translateY(8px); /* 부드러운 회전 */
+}
+
 .submenu {
     display: none; /* 기본적으로 서브 메뉴 숨김 */
     list-style-type: none;
@@ -92,8 +126,8 @@ header{
     background-color: #f5a50b;
     width: 100%; /* 부모 요소와 같은 너비 */
     opacity: 0; /* 기본적으로 불투명도 0 */
-    transform: translateY(-20px); /* 기본적으로 위로 이동하여 숨김 */
     transition: opacity 0.3s ease, transform 0.3s ease; /* 부드러운 애니메이션 효과 */
+    transform: translateY(-20px); /* 기본적으로 위로 이동하여 숨김 */
 }
 
 #sidebar ul li:hover > .submenu {
@@ -102,12 +136,13 @@ header{
     transform: translateY(0); /* 위로 이동한 위치에서 원래 위치로 이동 */
 }
 
-.close-btn {
+#closeSidebar {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 24px;
+    font-size: 35px;
     cursor: pointer;
+    margin-right: 5%;
 }
 
 #logo_text{
@@ -116,10 +151,5 @@ header{
 }
 
 .text_sidebar{
-    font-size: large;
-}
-
-#closeSidebar{
-    margin-right: 5%;
-    font-size: xx-large;
+    font-size: x-large;
 }
