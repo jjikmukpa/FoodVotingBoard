@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>음식게시판</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <!--    공통 사용    -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}">
 </header>
 
-<main class="main">
-    <h2>메인!!</h2>
+<main class="main" th:fragment="main" >
+    <h2 id="text_food">🍔 음식 게시판 🥙</h2>
+    <button type="button" class="main_btn1" th:onclick="|location.href='@{/post/postList}'|">음식 게시판 보기</button>
+    <button type="button" class="main_btn2">논쟁 게시판 보기</button>
+    <img id="main_image" src="/image/main_image.png" alt="main Image" >
 </main>
-<div>
-    <button type="button" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>
+<!--<div>-->
+<!--    <button type="button" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>-->
 
-
-</div>
+<!--</div>-->
 </body>
 </html>
 
