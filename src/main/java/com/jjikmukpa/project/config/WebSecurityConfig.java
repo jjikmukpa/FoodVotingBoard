@@ -38,6 +38,7 @@ public class WebSecurityConfig {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers("/","/index.html", "/layout/main/main.html").permitAll()   // 모두에게 허용
                     .requestMatchers("/member/register").anonymous()    // 회원가입은 비인증 사용자만 접근
+                    .requestMatchers("/auth/login").anonymous()
                     .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .anyRequest().authenticated();  // 인증된 사용자만 요청 가능
@@ -49,8 +50,9 @@ public class WebSecurityConfig {
                     .loginPage("/auth/login")           // 로그인 페이지 (GET)
                     .loginProcessingUrl("/auth/login")  // 로그인 처리 (POST)
                     .usernameParameter("memberId")      // userName으로 전달할 파라미터 설정
-                    .passwordParameter("password")      // password로 전달할 파라미터 설정
+                    .passwordParameter("memberPw")      // password로 전달할 파라미터 설정
                     .defaultSuccessUrl("/")             // 로그인 성공 시 이동할 url
+                    .failureUrl("/auth/login?error=true")
                     .permitAll();
         }));
 
