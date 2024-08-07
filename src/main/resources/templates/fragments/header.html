@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:display="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+</head>
 
 <body>
 <header th:fragment="header">
@@ -19,15 +24,12 @@
             <span sec:authorize="isAnonymous()"> | </span>
             <a class="login_menu2" sec:authorize="isAnonymous()" th:href="@{/member/register}">회원가입</a>
         </div>
-
-        <div sec:authorize="isAuthenticated()">
-            <a>[[| ${#authentication.principal.member.memberId} 님 환영합니다. |]]</a>
-        </div>
-
-        <div sec:authorize="isAuthenticated()">
-            <form th:action="@{/auth/logout}" method="post">
-                <button>Logout</button>
-            </form>
+        <div sec:authorize="isAuthenticated()" class="logout">
+            <a id="login_Success" sec:authorize="isAuthenticated()">[[| &apos; ${#authentication.principal.member.memberId} &apos; 님 환영합니다!  |]]</a>
+            <span sec:authorize="isAuthenticated()">&nbsp;|&nbsp;</span>
+                <form th:action="@{/auth/logout}" method="post" style="margin: 0;">
+                    <button id="logout_button">로그아웃</button>
+                </form>
         </div>
 
 <!--        <div sec:authorize="isAuthenticated()">-->
@@ -38,20 +40,34 @@
 <!--        </div>-->
     </div>
     <div id="sidebar">
-        <div class="close-btn" id="closeSidebar">&times;</div>
+        <div  id="closeSidebar">&times;</div>
         <ul class="text_sidebar">
-            <li><a href="#1">일반 게시판</a></li>
+            <li><a th:href='@{/post/postList}'>음식 게시판</a></li>
             <li><a href="#2">논쟁 게시판</a></li>
-            <li><a href="#3">마이페이지 ▼</a>
+            <li><a id="my_page">마이페이지</a>
                 <ul class="submenu">
-                    <li><a href="#4">나의 정보</a></li>
-                    <li><a href="#5">내 게시글</a></li>
-                    <li><a href="#6">내 임시 저장 글</a></li>
-                    <li><a href="#7">내 댓글</a></li>
-                    <li><a href="#8">내 추천</a></li>
+                    <li><a href="#3">나의 정보</a></li>
+                    <li><a href="#4">내 게시글</a></li>
+                    <li><a href="#5">내 임시 저장 글</a></li>
+                    <li><a href="#6">내 댓글</a></li>
+                    <li><a href="#7">내 추천</a></li>
                 </ul>
             </li>
         </ul>
     </div>
 </header>
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar');
+        if (sidebar.style.left === '-250px') {
+            sidebar.style.left = '0';
+        } else {
+            sidebar.style.left = '-250px';
+        }
+    }
+
+    document.getElementById('closeSidebar').onclick = function() {
+        document.getElementById('sidebar').style.left = '-250px';
+    };
+</script>
 </body>
