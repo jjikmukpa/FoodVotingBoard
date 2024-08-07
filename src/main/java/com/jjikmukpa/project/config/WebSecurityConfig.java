@@ -28,7 +28,7 @@ public class WebSecurityConfig {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers("/","/index.html", "/layout/main/main.html").permitAll()   // 모두에게 허용
                     .requestMatchers("/member/register").anonymous()    // 회원가입은 비인증 사용자만 접근
-                    .requestMatchers("/post/**").authenticated()
+                    .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .anyRequest().authenticated();  // 인증된 사용자만 요청 가능
         }));

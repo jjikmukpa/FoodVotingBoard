@@ -3,47 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
 </head>
 <body style="background-color: #e3e17b">
+    <header th:replace="~{/fragments/header :: header}"></header>
     <h1>회원가입</h1>
-    <form th:action="@{/member/register}" th:method="post">
+    <form id="signupForm" th:action="@{/member/register}" th:method="post">
         <div>
             <label>아이디 : </label>
-            <input type="text" name="memberId" id="memberId"><br>
+            <input type="text" name="memberId" id="memberId" required placeholder="아이디 입력 (20자 이내)" maxlength="20"><br>
+            <p id="messageId" hidden>중복되는 아이디입니다.</p>
 
             <label>비밀번호 : </label>
-            <input type="password" name="memberPw" id="memberPw"><br>
+            <input type="password" name="memberPw" id="memberPw" required maxlength="20" placeholder="8자 이상 20자 이내로 입력"><br>
+            <p id="messagePw" hidden></p>
 
             <label>이름 : </label>
-            <input type="text" name="name" id="name"><br>
+            <input type="text" name="name" id="name" required placeholder="이름 입력"><br>
 
             <label>닉네임 : </label>
-            <input type="text" name="nickname" id="nickname"><br>
+            <input type="text" name="nickname" id="nickname" placeholder="입력하지 않으시면 id와 동일하게 설정됩니다."><br>
+            <p id="messageNickname" hidden></p>
 
             <label>생년월일 : </label>
-            <input type="text" name="dateOfBirth" id="dateOfBirth"><br>
+            <input type="text" name="dateOfBirth" id="dateOfBirth" required placeholder="yyyyMMdd" maxlength="8"><br>
+            <p id="messageDob" hidden></p>
 
             <label>이메일 : </label>
-            <input type="text" name="email" id="email"><br>
+            <input type="text" name="email" id="email" required placeholder="이메일 입력"><br>
+            <p id="messageEmail" hidden></p>
 
             <label>핸드폰 번호 : </label>
-            <input type="text" name="phone" id="phone"><br>
+            <input type="text" name="phone" id="phone" required maxlength="13" placeholder="번호만 입력하세요."><br>
+            <p id="messagePhone" hidden></p>
 
             <label>주소 : </label>
-            <input type="text" name="address" id="address"><br>
+            <input type="text" name="address" id="address" required placeholder="주소 입력"><br>
 
-            <button type="submit">가입하기</button>
+            <button type="submit" id="signupBtn" disabled>가입하기</button>
         </div>
-
-        <script>
-            /* TODO: 1. 비번, 핸드폰 번호, 이메일 regex 확인
-                     2. 비어있는 element 있는지 확인
-                     3. id, nickname 중복되는지 확인
-                     (4. 번호, 이메일 인증)
-                     (5. 실제 존재하는 주소 선택)
-                     */
-
-        </script>
     </form>
+
+    <script>
+        /* TODO: 1. id, nickname 중복되는지 확인
+                 2. 재가입 방지
+                 (3. 번호, 이메일 인증)
+                 (4. 실제 존재하는 주소 선택)
+                 (5. 생년월일 날짜 선택)
+                 */
+
+        // 비어있는 element 있는지 확인
+        const inputs = document.querySelectorAll('#signupForm input:not(#nickname)');
+        function checkInputs() {
+            let flag = true;
+            inputs.forEach(function(input) {
+                if (input.value.trim() === '') {
+                    flag = false;
+                }
+            });
+
+            document.getElementById('signupBtn').disabled = !flag;
+        }
+
+        inputs.forEach(function(input) {
+            input.addEventListener('input', checkInputs);
+        });
+
+        // 생년월일은 숫자만 입력 가능
+        document.getElementById('dateOfBirth').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // 핸드폰 번호 입력 시 '-' 추가, 숫자만 입력 가능
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let phone = this.value.replace(/[^0-9]/g, '');
+
+            if (phone.length > 11) {
+                phone = phone.slice(0, 11);
+            }
+
+            if (phone.length < 4) {
+                this.value = phone;
+            } else if (phone.length < 8) {
+                this.value = phone.slice(0, 3) + '-' + phone.slice(3);  // 010 입력 후 '-' 추가
+            } else {
+                this.value = phone.slice(0, 3) + '-' + phone.slice(3, 7) + '-' + phone.slice(7);    // 4자리 더 입력 후 '-' 추가
+            }
+        });
+
+        // 비밀번호, 핸드폰 번호, 이메일, 생년월일 regex 확인
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('memberPw').value;
+            const email = document.getElementById('email').value;
+            const dateOfBirth = document.getElementById('dateOfBirth').value;
+            const phone = document.getElementById('phone').value;
+            const memberId = document.getElementById('memberId').value;
+            let nickname = document.getElementById('nickname').value;
+
+            const regexPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const regexDob = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+            const regexPhone = /^\d{3}-\d{4}-\d{4}$/;
+
+            if (!regexPw.test(password)) {
+                event.preventDefault();
+
+                document.getElementById('messagePw').textContent = "* 비밀번호는 최소 8자 이상이어야 하며, 적어도 하나의 문자, 숫자 및 특수 문자를 포함해야 합니다.";
+                document.getElementById('messagePw').style.color = 'red';
+                document.getElementById('messageNickname').style.fontSize = 'small';
+                document.getElementById('messagePw').removeAttribute("hidden");
+            } else {
+                document.getElementById('messagePw').setAttribute("hidden", "");
+                // document.getElementById('signupForm').submit();
+            }
+
+            if (!regexEmail.test(email)) {
+                event.preventDefault();
+
+                document.getElementById('messageEmail').textContent = "* 이메일 형식이 맞지 않습니다.";
+                document.getElementById('messageEmail').style.color = 'red';
+                document.getElementById('messageNickname').style.fontSize = 'small';
+                document.getElementById('messageEmail').removeAttribute("hidden");
+            } else {
+                document.getElementById('messageEmail').setAttribute("hidden", "");
+            }
+
+            if (!regexDob.test(dateOfBirth)) {
+                event.preventDefault();
+
+                document.getElementById('messageDob').textContent = "* 생년월일 형식에 맞지 않습니다.";
+                document.getElementById('messageDob').style.color = 'red';
+                document.getElementById('messageNickname').style.fontSize = 'small';
+                document.getElementById('messageDob').removeAttribute("hidden");
+            } else {
+                document.getElementById('messageDob').setAttribute("hidden", "");
+            }
+
+            if (!regexPhone.test(phone)) {
+                event.preventDefault();
+
+                document.getElementById('messagePhone').textContent = "* 전화번호 형식에 맞지 않습니다.";
+                document.getElementById('messagePhone').style.color = 'red';
+                document.getElementById('messageNickname').style.fontSize = 'small';
+                document.getElementById('messagePhone').removeAttribute("hidden");
+            } else {
+                document.getElementById('messagePhone').setAttribute("hidden", "");
+            }
+
+            // nickname이 비어있으면 id와 같게 설정
+            if (nickname.trim() === '') {
+                document.getElementById('messageNickname').textContent = "닉네임을 입력하지 않으시면 id와 동일하게 설정됩니다.";
+                document.getElementById('messageNickname').style.color = 'lightgray';
+                document.getElementById('messageNickname').style.fontSize = 'small';
+                document.getElementById('messageNickname').removeAttribute("hidden");
+
+                nickname = memberId;
+                document.getElementById('nickname').value = nickname;
+            } else {
+                document.getElementById('messageNickname').setAttribute("hidden", "");
+            }
+        });
+    </script>
 </body>
 </html>
