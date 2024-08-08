@@ -39,6 +39,8 @@ public class WebSecurityConfig {
                     .requestMatchers("/","/index.html", "/layout/main/main.html").permitAll()   // 모두에게 허용
                     .requestMatchers("/member/register").anonymous()    // 회원가입은 비인증 사용자만 접근
                     .requestMatchers("/auth/login").anonymous()
+                    .requestMatchers("/member/checkid").anonymous()
+                    .requestMatchers("/member/checknickname").anonymous()
                     .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .requestMatchers("/error/accessDenied").permitAll() // 접근 거부 페이지 허용
