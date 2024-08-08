@@ -4,10 +4,15 @@ import com.jjikmukpa.project.member.model.dto.SignupDTO;
 import com.jjikmukpa.project.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/member")
@@ -24,5 +29,21 @@ public class MemberController {
         memberService.register(signupDTO);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/checkid")
+    public ResponseEntity<Map<String, Boolean>> checkMemberId(@RequestParam String memberId) {
+        boolean exists = memberService.existsMemberId(memberId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/checknickname")
+    public ResponseEntity<Map<String, Boolean>> checkNickname(@RequestParam String nickname) {
+        boolean exists = memberService.existsNickname(nickname);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
     }
 }
