@@ -4,6 +4,7 @@ import com.jjikmukpa.project.member.model.dto.SignupDTO;
 import com.jjikmukpa.project.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +46,21 @@ public class MemberController {
         boolean exists = memberService.existsNickname(nickname);
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", exists);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/checkuser")
+    public ResponseEntity<Map<String, Boolean>> checkUser(
+            @RequestParam String email,
+            @RequestParam String phone) {
+        boolean emailExists = memberService.existsEmail(email);
+        boolean phoneExists = memberService.existsPhone(phone);
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("emailExists", emailExists);
+        response.put("phoneExists", phoneExists);
+
         return ResponseEntity.ok(response);
     }
 }
