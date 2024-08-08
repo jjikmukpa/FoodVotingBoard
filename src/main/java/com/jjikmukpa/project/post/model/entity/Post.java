@@ -24,7 +24,9 @@ public class Post {
 
     private LocalDateTime createdDate;
 
-    private long postCount;
+    private LocalDateTime modifyDate;
+
+    private long postCount; // 조회수
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_code", nullable = false)

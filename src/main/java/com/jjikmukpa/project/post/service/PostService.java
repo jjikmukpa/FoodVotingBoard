@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -45,6 +46,34 @@ public class PostService {
         Page<Post> postList = postRepository.findAll(pageable);
 
         return postList.map(post -> modelMapper.map(post, PostDTO.class));
+    }
+
+    public Post findPostById(int postNo) {
+
+        Post post = postRepository.findById(postNo)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        return post;
+    }
+
+    public void updatePost(int postNo, String postTitle, String content, LocalDateTime modifyDate){
+
+        Post post = findPostById(postNo);
+
+        post.setPostTitle(postTitle);
+        post.setContent(content);
+        post.setCreatedDate(modifyDate);
+
+        postRepository.save(post);
+    }
+
+    public void savePost(Post post) {
+        postRepository.save(post);
+    }
+
+    public boolean isPostOwner(int postNo, String memberId) {
+        Post post = findPostById(postNo);
+        return post.getMember().getMemberId().equals(memberId);
     }
 
 }

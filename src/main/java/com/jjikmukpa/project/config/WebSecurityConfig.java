@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/auth/login").anonymous()
                     .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
+                    .requestMatchers("/error/accessDenied").permitAll() // 접근 거부 페이지 허용
                     .anyRequest().authenticated();  // 인증된 사용자만 요청 가능
         }));
 
@@ -60,6 +61,12 @@ public class WebSecurityConfig {
             logoutConfigurer.logoutUrl("/auth/logout")
                     .logoutSuccessUrl("/");     // 로그아웃 후 메인페이지로 이동
         });
+
+        // 접근 거부 핸들러 설정
+        http.exceptionHandling(exceptionHandlingConfigurer ->
+                exceptionHandlingConfigurer
+                        .accessDeniedPage("/layout/error/accessDenied")
+        );
 
         return http.build();
     }
