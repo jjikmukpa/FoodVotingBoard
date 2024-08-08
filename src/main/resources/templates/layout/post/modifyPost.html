@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>글 수정</title>
+    <script>
+        function setModifyDate() {
+            document.getElementById("modifyDate").value = new Date().toISOString();
+        }
+    </script>
+</head>
+<body>
+<form th:action="@{/post/updatePost}" method="post">
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+    <input type="hidden" id="modifyDate" name="modifyDate"/>
+    <div>
+        <label for="postTitle">Title:</label>
+        <input type="text" id="postTitle" name="postTitle" th:value="${post.postTitle}" required>
+    </div>
+    <div>
+        <label for="content">Content:</label>
+        <input type="text" id="content" name="content" th:value="${post.content}" required>
+    </div>
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

@@ -13,7 +13,7 @@ public class CreatePostDTO {
 
     private String postNo;
     private String postTitle;
-    private LocalDateTime postDate;
+    private LocalDateTime createdDate;
     private String content;
     private Member member;
 
