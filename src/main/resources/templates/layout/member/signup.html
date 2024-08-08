@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
 </head>
 <body style="background-color: #e3e17b">
     <header th:replace="~{/fragments/header :: header}"></header>
@@ -52,10 +53,11 @@
     </form>
 
     <script>
-        /* TODO: 1. 재가입 방지
+        /* TODO: 1. 번호/이메일 이미 존재하면 재가입 방지
                  (2. 번호, 이메일 인증)
                  (3. 실제 존재하는 주소 선택)
                  (4. 생년월일 날짜 선택)
+                 (5. oauth2 회원가입)
                  */
 
         let idValid = false;
