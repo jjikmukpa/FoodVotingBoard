@@ -37,6 +37,26 @@
         <button id="loginBtn" type="submit" disabled>로그인</button>
     </form>
     <script>
+        // localStorage에서 저장된 id를 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            const id = localStorage.getItem('id');
+            if (id) {
+                document.getElementById('memberId').value = id;
+                document.getElementById('remember-id').checked = true;
+            }
+        });
+
+        // 아이디 저장을 체크하면 localStorage에 id 정보를 저장해놓기
+        document.getElementById('remember-id').addEventListener('change', function() {
+            const id = document.getElementById('memberId').value;
+
+            if (this.checked) {
+                localStorage.setItem('id', id);
+            } else {
+                localStorage.removeItem('id');
+            }
+        });
+
         // 비어있는 element 있는지 확인
         const inputs = document.querySelectorAll('#loginForm input');
         function checkInputs() {
