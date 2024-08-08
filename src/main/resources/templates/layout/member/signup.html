@@ -7,7 +7,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script defer th:src="@{/js/main.js}"></script>
+    <style>
+        .datepicker {
+            background-color: #f0f0f0;
+
+            /* datepicker가 다른 요소 위에 나타나게끔 */
+            z-index: 1050 !important;
+        }
+
+        /* 헤더(year, month) 배경 색상 */
+        .datepicker-days thead th {
+            background-color: #d0d0d0;
+        }
+
+        /* 일 배경 색상 */
+        .datepicker-days tbody td {
+            background-color: #ffffff;
+        }
+
+        /* 날짜 드롭다운 input text 바로 아래 위치하게 하기 */
+        .datepicker-dropdown {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body style="background-color: #e3e17b">
     <header th:replace="~{/fragments/header :: header}"></header>
@@ -34,7 +58,8 @@
             <p id="messageNickname" hidden></p>
 
             <label for="dateOfBirth">생년월일 : </label>
-            <input type="text" name="dateOfBirth" id="dateOfBirth" required placeholder="yyyyMMdd" maxlength="8"><br>
+<!--            <input type="text" name="dateOfBirth" id="dateOfBirth" required placeholder="yyyyMMdd" maxlength="8"><br>-->
+            <input type="text" name="dateOfBirth" id="dateOfBirth" required><br>
             <p id="messageDob" hidden></p>
 
             <label for="email">이메일 : </label>
@@ -52,11 +77,45 @@
         </div>
     </form>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript">
+        function getTodaysDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        $(document).ready(function() {
+            const today = getTodaysDate();
+
+            $('#dateOfBirth').datepicker({
+                format: "yyyy-mm-dd",
+                autoclose: true,    // 날짜 선택하면 datepicker 닫기
+                todayHighlight: true,
+                startDate: '1900-01-01',
+                endDate: today,
+                defaultViewDate: { year: 2000, month: 0}
+            }).on('show', function(e) {
+                setTimeout(function() {
+                    $('.datepicker').css({
+                        // 날짜 드롭다운 input text 바로 아래 위치하게 하기
+                        'position': 'absolute',
+                        'top': $('#dateOfBirth').offset().top + $('#dateOfBirth').outerHeight(),
+                        'left': $('#dateOfBirth').offset().left
+                    });
+                },100);
+            });
+        });
+    </script>
+
     <script>
         /* TODO: 1. 번호, 이메일 인증
                  2. 실제 존재하는 주소 선택
-                 3. 생년월일 날짜 선택
-                 4. oauth2 회원가입
+                 3. oauth2 회원가입
                  */
 
         let idValid = false;
@@ -212,7 +271,7 @@
 
             const regexPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
             const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const regexDob = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+            const regexDob = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
             const regexPhone = /^\d{3}-\d{4}-\d{4}$/;
 
             if (!regexPw.test(password)) {
