@@ -78,7 +78,7 @@ body{
     margin-left: 5%;
 }
 
-#checkIdBtn, #checkNicknameBtn{
+#checkIdBtn, #checkNicknameBtn, #email-button, #verify-button {
     background-color: #fdcf30;
     font-size: 22px;
     width: auto;
@@ -98,3 +98,24 @@ body{
 /*    margin-left: 5%;*/
 /*}*/
 
+.datepicker {
+    background-color: #f0f0f0;
+
+    /* datepicker가 다른 요소 위에 나타나게끔 */
+    z-index: 1050 !important;
+}
+
+/* 헤더(year, month) 배경 색상 */
+.datepicker-days thead th {
+    background-color: #d0d0d0;
+}
+
+/* 일 배경 색상 */
+.datepicker-days tbody td {
+    background-color: #ffffff;
+}
+
+/* 날짜 드롭다운 input text 바로 아래 위치하게 하기 */
+.datepicker-dropdown {
+    margin-top: 0;
+}
