@@ -75,14 +75,23 @@
 
             <label class="signup_label" for="email">이메일</label>
             <div class="signup_menu1">
-                <input type="text" name="email" id="email" required placeholder="이메일 입력"><br>
+                <input type="text" name="email" id="email" required placeholder="이메일 입력">
+                <button type="button" id="email-button">인증번호 발송</button><br>
             </div>
             <p id="messageEmail" hidden></p>
 
+            <label class="signup_label" for="verificationNum" hidden id="verificationNumLabel">인증번호 입력</label>
+            <div class="signup_menu1">
+                <input hidden type="text" name="verificationNum" id="verificationNum" required placeholder="인증번호 입력">
+                <button type="button" hidden id="verify-button">확인</button><br>
+            </div>
+            <p id="messageVerifyEmail" hidden></p>
+      
             <label class="signup_label" for="phone">핸드폰 번호</label>
             <div class="signup_menu1">
                 <input type="text" name="phone" id="phone" required maxlength="13" placeholder="-없이 번호만 입력하세요."><br>
             </div>
+
             <p id="messagePhone" hidden></p>
 
             <label class="signup_label" for="address">주소</label>
@@ -96,6 +105,70 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        let emailValid = false;
+
+        $(document).ready(function() {
+            let keyCode = '';
+            $('#email-button').on('click', function(event) {
+                // event.preventDefault();
+                const email = $('#email').val();
+
+                $.ajax({
+                    url: '/sendMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: email }),
+                    success: function(response) {
+                        keyCode = response;
+
+                        $('#messageEmail').text('Verification code sent to ' + email);
+                        $('#verificationNum').show();
+                        $('#verify-button').show();
+                        $('#verificationNumLabel').show();
+                        document.getElementById('verificationNum').value = '';
+
+                        alert("이메일이 전송되었습니다.");
+                    },
+                    error: function(xhr, status, error) {
+                        $('#messageEmail').text('Error sending verification code.');
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+
+            $('#verify-button').on('click', function(event) {
+                // event.preventDefault();
+                var code = $('#verificationNum').val();
+                var email = $('#email').val();
+
+                $.ajax({
+                    url: '/checkMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ key: keyCode, insertKey: code, email: email }),
+                    success: function(response) {
+                        if (response) {
+                            // $('#messageVerifyEmail').show().text('Verification successful!');
+                            alert("인증되었습니다.");
+                            emailValid = true;
+                            updateSignupButtonState();
+                        } else {
+                            // $('#messageVerifyEmail').show().text('Invalid verification code.');
+                            alert("인증 번호가 다릅니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#verifyMessage').text('Error verifying code.');
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+        });
+    </script>
 
     <script type="text/javascript">
         function getTodaysDate() {
@@ -130,7 +203,7 @@
     </script>
 
     <script>
-        /* TODO: 1. 번호, 이메일 인증
+        /* TODO: 1. 번호 인증
                  2. 실제 존재하는 주소 선택
                  3. oauth2 회원가입
                  */
@@ -138,13 +211,14 @@
         let idValid = false;
         let nicknameValid = false;
 
+
         let nick = document.getElementById('nickname').value;
         if (nick.trim() === '') {
             nicknameValid = true;
             updateSignupButtonState();
         }
 
-        // id 중복되는지 확인
+        // id 중복 확인
         document.getElementById('checkIdBtn').addEventListener('click', function() {
             const memberId = document.getElementById('memberId').value;
 
@@ -182,6 +256,19 @@
             if (idValid) {  // 이미 중복확인 버튼을 누른 상황에서 다시 바꾸면 다시 중복확인 필요
                 idValid = false;
             }
+
+            updateSignupButtonState();
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            if (emailValid) {  // 이미 이메일 인증을 받은 상황에서 바꾸면 다시 인증 필요
+                emailValid = false;
+            }
+
+            $('#verificationNum').hide();
+            document.getElementById('verificationNum').value = '';
+            $('#verify-button').hide();
+            $('#verificationNumLabel').hide();
 
             updateSignupButtonState();
         });
@@ -244,7 +331,7 @@
             const inputs = document.querySelectorAll('#signupForm input:not(#nickname)');
             let allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
 
-            document.getElementById('signupBtn').disabled = !(allFilled && idValid && nicknameValid);
+            document.getElementById('signupBtn').disabled = !(emailValid && allFilled && idValid && nicknameValid);
         }
 
         const inputs = document.querySelectorAll('#signupForm input:not(#nickname)');
@@ -365,7 +452,7 @@
                 document.getElementById('messageNickname').setAttribute("hidden", "");
             }
 
-            if(regexPw.test(password) && regexEmail.test(email) && regexDob.test(dateOfBirth) && regexPhone.test(phone) && idValid && nicknameValid){
+            if(regexPw.test(password) && regexEmail.test(email) && regexDob.test(dateOfBirth) && regexPhone.test(phone) && emailValid && idValid && nicknameValid){
                 checkIfUserAlrExists(email, phone);
             }
 
