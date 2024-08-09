@@ -61,7 +61,7 @@ header{
 #menubar{
     cursor: pointer;
     width: 28px;
-    height: 23px;
+    height: 25px;
     margin-left: 3%;
     margin-bottom: 4px;
     display: flex;
@@ -70,13 +70,13 @@ header{
 }
 .bar{
     width: 100%;
-    height: 4px;
+    height: 5px;
     background-color: black;
 }
 #sidebar {
     position: fixed;
     left: -250px; /* 처음에 화면 밖에 위치 */
-    top: 7.8%;
+    top: 7.5%;
     width: 250px;
     height: 100%;
     background-color: #f5a50b;
@@ -102,20 +102,20 @@ header{
     display: block;
 }
 
-/* 새로 추가된 부분 */
-#my_page::after {
+ /*새로 추가된 부분 */
+.my_page::after {
     content: '➤'; /* 기본 기호 */
     display: inline-block;
     margin-left: 5px;
     transition: transform 0.3s ease, content 0.3s ease; /* 부드러운 회전 애니메이션 */
 }
 
-#my_page:hover::after{
+.my_page:hover::after{
     content: '▼'; /* 호버 시 기호 변경 */
     transform: rotate(120deg) translateY(8px); /* 부드러운 회전 */
 }
 
-.submenu {
+#submenu {
     display: none; /* 기본적으로 서브 메뉴 숨김 */
     list-style-type: none;
     padding: 0;
@@ -130,7 +130,7 @@ header{
     transform: translateY(-20px); /* 기본적으로 위로 이동하여 숨김 */
 }
 
-#sidebar ul li:hover > .submenu {
+#sidebar ul li:hover > #submenu {
     display: block; /* 서브 메뉴 표시 */
     opacity: 1; /* 불투명도 1로 설정 */
     transform: translateY(0); /* 위로 이동한 위치에서 원래 위치로 이동 */
