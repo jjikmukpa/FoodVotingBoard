@@ -42,7 +42,8 @@ public class WebSecurityConfig {
                     .requestMatchers("/member/checkid").anonymous()
                     .requestMatchers("/member/checknickname").anonymous()
                     .requestMatchers("/member/checkuser").anonymous()
-                    .requestMatchers("/post/**").permitAll()
+                    .requestMatchers("/post/postList","/post/detailPost/**").permitAll()
+                    .requestMatchers("/post/createPost","/post/modifyPost/**","/post/delete/**").authenticated()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .requestMatchers("/error/accessDenied").permitAll() // 접근 거부 페이지 허용
                     .requestMatchers("/member/mypage").authenticated()

@@ -13,15 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 
 @Controller
@@ -40,21 +38,21 @@ public class PostController {
         String memberId = userDetails.getUsername();
 
         Member member = memberService.findMemberById(memberId);
-        log.info("member : {}", member.getName());
 
-        postService.createPost(createpostDTO,member);
+        postService.createPost(createpostDTO, member);
 
-        return "redirect:/";
+        return "redirect:/post/postList";
     }
 
     @GetMapping("/createPost")
-    public String createPost(){ return "layout/post/createPost"; }
+    public String createPost() {
+        return "layout/post/createPost";
+    }
 
     @GetMapping("/postList")
-    public String findAllPost(@PageableDefault Pageable pageable, Model model){
+    public String findAllPost(@PageableDefault Pageable pageable, Model model) {
 
         Page<PostDTO> postList = postService.findAllPost(pageable);
-        log.info(String.valueOf(postList.getTotalElements()));
         PagingButtonInfo paging = Pagenation.getPagingButtonInfo(postList);
 
         model.addAttribute("paging", paging);
@@ -64,23 +62,26 @@ public class PostController {
     }
 
     @GetMapping("/detailPost/{postNo}")
-    public String detailPost(@PathVariable int postNo, Model model){
+    public String detailPost(@PathVariable int postNo, @AuthenticationPrincipal UserDetails userDetails,
+                             Model model) {
 
         Post post = postService.findPostById(postNo);
+        String currentUserId = userDetails.getUsername();
 
         model.addAttribute("post", post);
+        model.addAttribute("currentUserId",currentUserId);
 
         return "layout/post/detailPost";
     }
 
     @GetMapping("/modifyPost/{postNo}")
-    public String modifyPost(@PathVariable("postNo") int postNo ,@AuthenticationPrincipal UserDetails userDetails,
-                             Model model) {
+        public String modifyPost(@PathVariable("postNo") int postNo, @AuthenticationPrincipal UserDetails userDetails,
+                                 Model model) {
 
         String currentUserId = userDetails.getUsername();
 
-        if (!postService.isPostOwner(postNo,currentUserId)){
-            model.addAttribute("message","이 페이지에 접근할 권한이 없습니다.");
+        if (!postService.isPostOwner(postNo, currentUserId)) {
+            model.addAttribute("message", "이 페이지에 접근할 권한이 없습니다.");
             return "layout/error/accessDenied";
         }
 
@@ -98,8 +99,33 @@ public class PostController {
 
         LocalDateTime modifyDate = LocalDateTime.now();
 
-        postService.updatePost(postNo,postTitle,content,modifyDate);
+        postService.updatePost(postNo, postTitle, content, modifyDate);
 
         return "redirect:/post/detailPost/" + postNo;
     }
+
+    @PostMapping("/delete/{postNo}")
+    public String deletePost(@PathVariable("postNo") int postNo,
+                             @AuthenticationPrincipal UserDetails userDetails,
+                             RedirectAttributes redirectAttributes,
+                             Model model) {
+
+        String currentUserId = userDetails.getUsername();
+
+        if (!postService.isPostOwner(postNo, currentUserId)) {
+            model.addAttribute("message", "권한이 없습니다.");
+            return "layout/error/accessDenied";
+        }
+
+        boolean isDeleted = postService.deletePost(postNo);
+
+        if (isDeleted) {
+            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
+            return "redirect:/post/postList";
+        }else {
+            redirectAttributes.addFlashAttribute("message", "게시글 삭제에 실패했습니다.");
+            return "redirect:/post/detailPost";
+        }
+    }
+
 }

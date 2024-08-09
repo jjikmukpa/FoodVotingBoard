@@ -11,11 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +45,8 @@ public class PostService {
         return postList.map(post -> modelMapper.map(post, PostDTO.class));
     }
 
+
+
     public Post findPostById(int postNo) {
 
         Post post = postRepository.findById(postNo)
@@ -67,13 +66,24 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void savePost(Post post) {
-        postRepository.save(post);
-    }
-
     public boolean isPostOwner(int postNo, String memberId) {
         Post post = findPostById(postNo);
         return post.getMember().getMemberId().equals(memberId);
     }
 
+    public boolean deletePost(int postNo) {
+        // 실제 데이터베이스에서 게시글을 삭제하는 로직을 구현
+        try {
+            if (postRepository.existsById(postNo)) {
+                postRepository.deleteById(postNo);
+                return true; // 삭제 성공
+            }else {
+                return false; // 게시글이 존재하지 않음
+            }
+        } catch (Exception e) {
+            // 예외가 발생하면 false 반환
+            return false;
+        }
+
+    }
 }

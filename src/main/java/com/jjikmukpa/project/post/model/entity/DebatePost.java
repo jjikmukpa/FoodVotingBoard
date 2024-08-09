@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "post")
+@Table(name = "debatePost")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Post {
+public class DebatePost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,7 @@ public class Post {
 
     private LocalDateTime createdDate;
 
-    private LocalDateTime modifyDate;
-
-    private long postCount; // 조회수
+    private long postCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_code", nullable = false)
@@ -35,5 +33,4 @@ public class Post {
     private String content;
 
     private String blindStatus;
-
 }

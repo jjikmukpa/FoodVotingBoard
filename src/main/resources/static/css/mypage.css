@@ -1,0 +1,57 @@
+body{
+    font-family: "Black Han Sans", serif;
+    background-color: #ffd130;
+    margin: 0;
+    padding: 0;
+}
+
+.mypage_title{
+    margin-top: 3%;
+    font-family: "Black Han Sans", serif;
+    color: black;
+    font-size: 3.5em;
+    text-align: center;
+}
+
+.mypage_menu{
+    border: 5px;
+    font-family: "Black Han Sans", serif;
+    color: black;
+    font-size: 2em;
+    text-align: center;
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.mypage_menu1{
+    background-color: #fdf8cc;
+    border-radius: 50px / 50px; /* 가로로 긴 동그라미 형태 */
+    margin: 1% auto;
+    width: 310px; /* 너비 고정 */
+    height: 60px; /* 높이 고정 */
+    display: flex; /* Flexbox로 설정 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    font-size: 1em; /* 텍스트 크기 */
+}
+
+.mypage_menu1 a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 텍스트 색상 검은색으로 설정 */
+    transition: color 0.3s, transform 0.2s; /* 색상 및 변형에 대한 전환 효과 */
+    display: flex; /* Flexbox로 설정 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    width: 100%; /* 부모 요소의 너비를 가득 채움 */
+    height: 100%; /* 부모 요소의 높이를 가득 채움 */
+}
+
+.mypage_menu1 a:hover {
+    color: #4fa8da;
+}
+
+.mypage_menu1 a:active {
+    transform: scale(0.8); /* 클릭 시 작아짐 */
+    color: #103d55;
+    cursor: pointer;
+}

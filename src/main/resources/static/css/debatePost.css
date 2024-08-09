@@ -33,35 +33,15 @@ header{
     cursor: pointer; /* 커서를 포인터로 변경 */
 }
 
-.login_menu1, .login_menu2, #login_Success, #logout{
+.login_menu1, .login_menu2{
     text-decoration: none;
     color: black;
     font-size: large;
 }
-
-.logout{
-    display: flex;
-}
-
-#logout_button {
-    font-family: "Black Han Sans", serif;
-    background: none;
-    border: none;
-    color: black;
-    font-size: large;
-    cursor: pointer;
-    padding: 0;
-    float: right;
-}
-
-#logout_button:hover {
-    color: #0ba3f5; /* 호버 시 색상 변경 */
-}
-
 #menubar{
     cursor: pointer;
     width: 28px;
-    height: 25px;
+    height: 23px;
     margin-left: 3%;
     margin-bottom: 4px;
     display: flex;
@@ -70,18 +50,18 @@ header{
 }
 .bar{
     width: 100%;
-    height: 5px;
+    height: 4px;
     background-color: black;
 }
 #sidebar {
     position: fixed;
     left: -250px; /* 처음에 화면 밖에 위치 */
-    top: 7.5%;
+    top: 7.8%;
     width: 250px;
     height: 100%;
     background-color: #f5a50b;
     transition: left 0.3s ease; /* 애니메이션 효과 */
-    box-shadow: 1px 0 3px rgba(0,0,0,0.5);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     padding-top: 60px; /* 헤더 높이만큼 패딩 */
 }
 
@@ -101,21 +81,7 @@ header{
     text-decoration: none;
     display: block;
 }
-
- /*새로 추가된 부분 */
-.my_page::after {
-    content: '➤'; /* 기본 기호 */
-    display: inline-block;
-    margin-left: 5px;
-    transition: transform 0.3s ease, content 0.3s ease; /* 부드러운 회전 애니메이션 */
-}
-
-.my_page:hover::after{
-    content: '▼'; /* 호버 시 기호 변경 */
-    transform: rotate(120deg) translateY(8px); /* 부드러운 회전 */
-}
-
-#submenu {
+.submenu {
     display: none; /* 기본적으로 서브 메뉴 숨김 */
     list-style-type: none;
     padding: 0;
@@ -126,23 +92,24 @@ header{
     background-color: #f5a50b;
     width: 100%; /* 부모 요소와 같은 너비 */
     opacity: 0; /* 기본적으로 불투명도 0 */
-    transition: opacity 0.3s ease, transform 0.3s ease; /* 부드러운 애니메이션 효과 */
     transform: translateY(-20px); /* 기본적으로 위로 이동하여 숨김 */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* 부드러운 애니메이션 효과 */
 }
 
-#sidebar ul li:hover > #submenu {
+#sidebar ul li:hover > .submenu {
     display: block; /* 서브 메뉴 표시 */
     opacity: 1; /* 불투명도 1로 설정 */
     transform: translateY(0); /* 위로 이동한 위치에서 원래 위치로 이동 */
 }
 
-#closeSidebar {
+
+
+.close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 35px;
+    font-size: 24px;
     cursor: pointer;
-    margin-right: 5%;
 }
 
 #logo_text{
@@ -151,5 +118,31 @@ header{
 }
 
 .text_sidebar{
-    font-size: x-large;
+    font-size: large;
 }
+
+#closeSidebar{
+    margin-right: 5%;
+    font-size: xx-large;
+}
+
+table {
+    width: 100%; /* 테이블이 부모 요소의 전체 너비를 차지하도록 설정 */
+    border-collapse: collapse; /* 셀 간의 간격 제거 */
+}
+
+th, td {
+    padding: 10px; /* 셀 내부 여백 */
+    border: 1px solid #ccc; /* 셀 테두리 */
+    text-align: left; /* 텍스트 정렬 */
+}
+
+th {
+    background-color: #f9ed89; /* 헤더 배경색 */
+}
+
+td {
+    background-color: #fff; /* 셀 배경색 */
+}
+
+
