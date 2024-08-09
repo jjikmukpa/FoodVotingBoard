@@ -63,4 +63,8 @@ public class MemberController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "layout/member/mypage"; }
 }

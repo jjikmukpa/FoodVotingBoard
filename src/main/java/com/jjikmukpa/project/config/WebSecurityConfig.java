@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .requestMatchers("/error/accessDenied").permitAll() // 접근 거부 페이지 허용
+                    .requestMatchers("/member/mypage").authenticated()
                     .anyRequest().authenticated();  // 인증된 사용자만 요청 가능
         }));
 
