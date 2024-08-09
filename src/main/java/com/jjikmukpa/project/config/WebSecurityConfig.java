@@ -1,12 +1,12 @@
 package com.jjikmukpa.project.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -29,12 +29,12 @@ public class WebSecurityConfig {
 //            .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 
 
-
     // Spring Security에서 제공하는 인증, 인가를 위한 필터들의 모음
     // 기본적으로 제공하는 필터들이 있고, 커스텀 필터 또한 적용시킬 수 있다.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry -> {
+        http.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers("/","/index.html", "/layout/main/main.html").permitAll()   // 모두에게 허용
                     .requestMatchers("/member/register").anonymous()    // 회원가입은 비인증 사용자만 접근
@@ -45,6 +45,9 @@ public class WebSecurityConfig {
                     .requestMatchers("/post/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능
                     .requestMatchers("/error/accessDenied").permitAll() // 접근 거부 페이지 허용
+                    .requestMatchers("/member/mypage").authenticated()
+                    .requestMatchers("/sendMail").permitAll()
+                    .requestMatchers("/checkMail").permitAll()
                     .anyRequest().authenticated();  // 인증된 사용자만 요청 가능
         }));
 

@@ -21,7 +21,7 @@ public class MailManager {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         mimeMessage.setFrom(sender);
 
-        // 받는사람
+        // 받는 사람
         mimeMessage.addRecipient(MimeMessage.RecipientType.TO, new InternetAddress(sendTo));
         mimeMessage.setSubject(sub);
         mimeMessage.setText(con);
