@@ -45,26 +45,14 @@ public class PostController {
     }
 
     @GetMapping("/createPost")
-    public String createPost(int postNo,
-                             @AuthenticationPrincipal UserDetails userDetails,
-                             Model model) {
-
-        String currentUserId = userDetails.getUsername();
-
-        if (!postService.isPostOwner(postNo, currentUserId)) {
-            model.addAttribute("message", "이 페이지에 접근할 권한이 없습니다.");
-            return "layout/error/accessDenied"; // 권한 없음 페이지로 리다이렉트
-        }
-
-        model.addAttribute("postNo", postNo);
-        return "redirect:/post/postList"; // 게시글 상세 페이지로 이동
+    public String createPost() {
+        return "layout/post/createPost";
     }
 
     @GetMapping("/postList")
     public String findAllPost(@PageableDefault Pageable pageable, Model model) {
 
         Page<PostDTO> postList = postService.findAllPost(pageable);
-        log.info(String.valueOf(postList.getTotalElements()));
         PagingButtonInfo paging = Pagenation.getPagingButtonInfo(postList);
 
         model.addAttribute("paging", paging);
@@ -74,11 +62,14 @@ public class PostController {
     }
 
     @GetMapping("/detailPost/{postNo}")
-    public String detailPost(@PathVariable int postNo, Model model) {
+    public String detailPost(@PathVariable int postNo, @AuthenticationPrincipal UserDetails userDetails,
+                             Model model) {
 
         Post post = postService.findPostById(postNo);
+        String currentUserId = userDetails.getUsername();
 
         model.addAttribute("post", post);
+        model.addAttribute("currentUserId",currentUserId);
 
         return "layout/post/detailPost";
     }
@@ -122,7 +113,7 @@ public class PostController {
         String currentUserId = userDetails.getUsername();
 
         if (!postService.isPostOwner(postNo, currentUserId)) {
-            model.addAttribute("message", "이 페이지에 접근할 권한이 없습니다.");
+            model.addAttribute("message", "권한이 없습니다.");
             return "layout/error/accessDenied";
         }
 
@@ -137,19 +128,4 @@ public class PostController {
         }
     }
 
-    @GetMapping("/confirmDelete/{postNo}")
-    public String confirmDelete(@PathVariable("postNo") int postNo,
-                               @AuthenticationPrincipal UserDetails userDetails,
-                               Model model) {
-
-        String currentUserId = userDetails.getUsername();
-
-        if (!postService.isPostOwner(postNo, currentUserId)) {
-            model.addAttribute("message", "이 페이지에 접근할 권한이 없습니다.");
-            return "layout/error/accessDenied"; // 권한 없음 페이지로 리다이렉트
-        }
-
-        model.addAttribute("postNo", postNo);
-        return "redirect:/post/detailPost/"+ postNo; // 게시글 상세 페이지로 이동
-    }
 }
