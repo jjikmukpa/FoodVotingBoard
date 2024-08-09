@@ -46,5 +46,15 @@ public class MemberService {
         return member;
     }
 
+    public boolean existsMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
 
+    public boolean existsNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    public boolean existsEmail(String email) { return memberRepository.existsByEmail(email); }
+
+    public boolean existsPhone(String phone) { return memberRepository.existsByPhone(phone); }
 }

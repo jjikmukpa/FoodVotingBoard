@@ -1,0 +1,100 @@
+body{
+    font-family: "Black Han Sans", serif;
+    background-color: #ffd130;
+}
+
+.signup_menu button{
+    font-family: "Black Han Sans", serif;
+}
+
+#signup_text{
+    font-family: "Black Han Sans", serif;
+    color: black;
+    font-size: 3.5em;
+    text-align: center;
+    margin-top: 25px;
+}
+
+#signupForm{
+    border: 2px;
+    font-family: "Black Han Sans", serif;
+    color: black;
+    font-size: 25px;
+    /*text-align: center;*/
+    margin: 20px auto;
+    width: 45%;
+    /*max-width: 500px;*/
+    background-color: #fdcf30;
+    /*padding: 20px;*/
+    border-radius: 50%;
+    padding: 20px;
+    position: relative;
+}
+
+.signup_menu1 {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.signup_menu1 input {
+    font-family: "Black Han Sans", serif;
+    background-color: #fbf6ca;
+    width: 100%;
+    padding: 35px 20px;
+    margin-bottom: 2%;
+    font-size: 22px;
+    border: 1px solid #f7eb88;
+    border-radius: 50px;
+    /*margin: 1% auto;*/
+    height: 60px;
+    box-sizing: border-box;
+    /*height: 55px;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
+}
+
+#signupBtn {
+    background-color: #f7eb88;
+    color: #000000;
+    border: none;
+    border-radius: 50px;
+    font-size: 30px;
+    width: 100%;
+    height: 70px;
+    font-family: "Black Han Sans", serif;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#signupBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.signup_label{
+    margin-left: 5%;
+}
+
+#checkIdBtn, #checkNicknameBtn{
+    background-color: #fdcf30;
+    font-size: 22px;
+    width: auto;
+    height: auto;
+    border: none;
+    /*border: 1px solid black;*/
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    position: absolute;
+    right: 30px;
+    top: 40%;
+    transform: translateY(-50%);
+}
+
+/*#signupBtn{*/
+/*    margin-left: 5%;*/
+/*}*/
+

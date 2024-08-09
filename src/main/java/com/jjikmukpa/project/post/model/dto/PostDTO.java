@@ -14,7 +14,8 @@ public class PostDTO {
 
     private long postNo;
     private String postTitle;
-    private LocalDateTime postDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifyDate;
     private Member member;
 
 }

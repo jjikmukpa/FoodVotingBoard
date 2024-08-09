@@ -1,0 +1,99 @@
+.login-container {
+    margin-left: -1%;
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.login-form {
+    background-color: #fdcf30;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-group {
+    font-family: "Black Han Sans", serif;
+    margin: 10px 40px 30px 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    font-size: 1.8em;
+}
+
+.input-group input {
+    width: 85%;
+    padding: 10px;
+    font-size: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #888;
+}
+
+.additional-options {
+    width: 103%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.remember-id {
+    margin-left: 11.5%;
+    display: flex;
+    align-items: center;
+}
+
+.remember-id input {
+    margin-right: 5px;
+}
+
+.help-links {
+    display: flex;
+    gap: 10px;
+}
+
+.help-links a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 0.9em;
+}
+
+.help-links a:hover {
+    text-decoration: underline;
+}
+
+#loginBtn {
+    margin-top: 15%;
+    margin-left: 50%;
+    font-family: "Black Han Sans", serif;
+    padding: 10px 20px;
+    font-size: 1.8em;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#memberId, #memberPw{
+    font-family: "Black Han Sans", serif;
+}
+
+#errorMsg{
+    margin-left:14.5%;
+    margin-bottom: -5%;
+}

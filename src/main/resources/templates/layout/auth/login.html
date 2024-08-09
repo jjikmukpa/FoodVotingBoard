@@ -3,26 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <script defer th:src="@{/js/main.js}"></script>
 </head>
-<body style="background-color: #e3e17b">
-<header th:replace="~{/fragments/header :: header}">
+<body style="background-color: #fdcf30">
+<header th:replace="~{/fragments/header :: header}"></header>
+<main class="login-container">
+    <form id="loginForm" th:action="@{/auth/login}" th:method="post">
+        <div class="input-group">
+            <label for="memberId">아이디</label>
+            <input type="text" name="memberId" id="memberId" placeholder="아이디를 입력하세요">
+        </div>
+        <div class="input-group">
+            <label for="memberPw">비밀번호</label>
+            <input type="password" name="memberPw" id="memberPw" placeholder="비밀번호를 입력하세요">
+        </div>
+        <div class="additional-options">
+            <div class="remember-id">
+                <input type="checkbox" id="remember-id" name="remember-id">
+                <label for="remember-id">아이디 저장</label>
+            </div>
+            <div class="help-links">
+                <a href="#" id="findId">아이디 찾기</a>
+                <a href="#" id="findPassword">비밀번호 찾기</a>
+            </div>
+        </div>
 
-</header>
-<form th:action="@{/auth/login}" th:method="post">
-    <div>
-        <label>아이디 : </label>
-        <input type="text" name="memberId" id="memberId">
-    </div>
-    <div>
-        <label>비밀번호 : </label>
-        <input type="password" name="password" id="password">
-    </div>
-    <button id="login">로그인</button>
-</form>
+        <p id="errorMsg" th:if="${param.error}" style="color: red;">아이디 또는 비밀번호가 다릅니다.</p>
+        <button id="loginBtn" type="submit" disabled>로그인</button>
+    </form>
+    <script>
+        // localStorage에서 저장된 id를 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            const id = localStorage.getItem('id');
+            if (id) {
+                document.getElementById('memberId').value = id;
+                document.getElementById('remember-id').checked = true;
+            }
+        });
+
+        // 아이디 저장을 체크하면 localStorage에 id 정보를 저장해놓기
+        document.getElementById('remember-id').addEventListener('change', function() {
+            const id = document.getElementById('memberId').value;
+
+            if (this.checked) {
+                localStorage.setItem('id', id);
+            } else {
+                localStorage.removeItem('id');
+            }
+        });
+
+        // 비어있는 element 있는지 확인
+        const inputs = document.querySelectorAll('#loginForm input');
+        function checkInputs() {
+            let flag = true;
+            inputs.forEach(function(input) {
+                if (input.value.trim() === '') {
+                    flag = false;
+                }
+            });
+
+            document.getElementById('loginBtn').disabled = !flag;
+        }
+
+        inputs.forEach(function(input) {
+            input.addEventListener('input', checkInputs);
+        });
+    </script>
+</main>
 </body>
 </html>

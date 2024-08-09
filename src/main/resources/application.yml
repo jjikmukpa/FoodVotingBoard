@@ -6,21 +6,19 @@ spring:
     url: jdbc:mysql://localhost:3306/boarddb
     username: ohgiraffers
     password: ohgiraffers
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        format_sql: true
   jpa:
-    generate-ddl: true
-    show-sql: true
-    database: mysql
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-        '[format_sql]': true
-
+        format_sql: true
+#  jpa:
+#    generate-ddl: false
+#    show-sql: true
+#    database: mysql
+#    properties:
+#      hibernate:
+#        '[format_sql]': true
 logging:
   level:
     root: info
-
