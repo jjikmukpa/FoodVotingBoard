@@ -2,7 +2,6 @@ package com.jjikmukpa.project.post.model.dto;
 
 import com.jjikmukpa.project.member.model.entity.Member;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -10,11 +9,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class PostDTO {
+public class CreateDebatePostDTO {
 
-    private long postNo;
-    private String postTitle;
-    private LocalDateTime postDate;
+    private String debatePostNo;
+    private String debatePostTitle;
+    private LocalDateTime debatePostDate;
+    private String content;
     private Member member;
+
 
 }

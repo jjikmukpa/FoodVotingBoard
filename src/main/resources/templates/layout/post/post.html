@@ -8,7 +8,6 @@
     <h1>일반 게시판 리스트 나오는 곳</h1>
     <button type="button" th:onclick="|location.href='@{/post/createPost}'|">글쓰기</button>
 
-
     <table>
         <tr>
             <th>글번호</th>
@@ -16,6 +15,7 @@
             <th>글쓴날짜</th>
             <th>글작성자</th>
         </tr>
+
         <tr th:each="post : ${ postList }">
             <td th:text="${ post.postNo }"></td>
             <td th:text="${ post.postTitle }"></td>
@@ -23,9 +23,11 @@
             <td th:text="${ post.member.name }"></td>
         </tr>
     </table>
+
     <div id="paging">
         <!-- 맨 앞으로 이동 -->
         <button th:onclick="'location.href=\'/post/postList?page=' + ${ paging.startPage } + '\''"><<</button>
+
         <!-- 이전 페이지로 이동 -->
         <button th:onclick="'location.href=\'/post/postList?page=' + ${ paging.currentPage - 1} + '\''"
                 th:disabled="${ postList.first }"><</button>
@@ -42,6 +44,7 @@
         <button th:onclick="'location.href=\'/post/postList?page=' + ${ paging.currentPage + 1} + '\''"
                 th:disabled="${ postList.last }">>
         </button>
+
         <!-- 맨 뒤로 이동 -->
         <button th:onclick="'location.href=\'/post/postList?page=' + ${ paging.endPage } + '\''">
             >>

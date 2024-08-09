@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>논쟁 게시판 글쓰기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/createdebatepost.css}"/>
+    <!--    공통 사용    -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/createdebatepost.js}"></script>
+
+</head>
+<body>
+
+<header th:replace="~{/fragments/header :: header}">
+</header>
+
+<form th:action="@{/debatePost/create}" method="post">
+    <h1 class="title">논쟁 게시판 글쓰기</h1>
+
+    <div class="form-group">
+        <label for="title">제목을 입력하세요:</label>
+        <input type="text" id="title" name="debatePostTitle" required>
+    </div>
+
+    <div class="form-group">
+        <label for="content">내용을 입력하세요:</label>
+        <textarea id="content" name="content" rows="10" required></textarea>
+    </div>
+
+    <div class="image-upload">
+        <span>이미지 추가하기:</span>
+        <div class="button-container">
+            <label for="file1">새 사진 추가하기</label>
+            <input type="file" id="file1" accept="image/*" onchange="previewImage(event, 'preview1')">
+            <label for="file2">새 사진 추가하기</label>
+            <input type="file" id="file2" accept="image/*" onchange="previewImage(event, 'preview2')">
+        </div>
+        <div class="image-preview">
+            <img id="preview1" src="" alt="Image Preview" style="display:none;">
+            <img id="preview2" src="" alt="Image Preview" style="display:none;">
+        </div>
+    </div>
+    <div class="form-buttons">
+        <button class="submit-button">임시저장</button>
+        <button class="reset-button">저장</button>
+    </div>
+
+</form>
+</body>
+</html>

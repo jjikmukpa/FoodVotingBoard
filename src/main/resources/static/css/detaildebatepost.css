@@ -1,0 +1,92 @@
+.title{
+    margin-left: 5%;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px 5%;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.debate-board {
+    text-align: left;
+}
+
+.post-info, .time-info {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.food-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.option {
+    width: 48%;
+    text-align: center;
+}
+
+.option img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.vote-bar {
+    height: 20px;
+    background-color: #eee;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.vote-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.option1 {
+    background-color: #f94144; /* 파스타 색상 */
+}
+
+.option2 {
+    background-color: #f3722c; /* 짬뽕 색상 */
+}
+
+.vote-count {
+    font-weight: bold;
+}
+
+.comments {
+    margin-top: 30px;
+}
+
+.comment {
+    background-color: #f9c74f;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.comment-footer {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+#addCommentButton {
+    background-color: #f94144;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#addCommentButton:hover {
+    background-color: #f3722c;
+}
