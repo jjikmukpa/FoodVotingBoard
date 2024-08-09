@@ -8,10 +8,6 @@
 </head>
 <body>
 
-<button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
-<button id="deleteBtn" th:onclick="|location.href='@{/post/confirmDelete/{postNo}(postNo=${post.postNo})}'|">삭제</button>
-
-
 <div>
     <h2 th:text ="${ post.postTitle}">제목</h2>
     <p th:text="${post.createdDate}">등록 날짜</p>
@@ -23,8 +19,11 @@
 
 <a href="/post/postList">목록으로 돌아가기</a>
 
-<!--    <button type="submit">test</button>-->
-<!--</form>-->
+<div th:if="${post.member.memberId} == ${currentUserId}">
+<button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
+<button id="deleteBtn">삭제</button>
+</div>
+
 <!-- 삭제 확인 모달 -->
 <div id="confirmModal" class="modal">
     <div class="modal-content">
@@ -75,6 +74,7 @@
 
     // 삭제 완료 모달 창에서 확인 버튼 클릭 시 페이지 리다이렉트
     confirmDeleteBtn.addEventListener("click", function() {
+        deleteForm.submit()
         alertModal.style.display = "none";
         window.location.href = "/post/postList"; // 게시글 목록 페이지로 이동
     });
@@ -83,7 +83,6 @@
     alertCancelBtn.addEventListener("click", function() {
         alertModal.style.display = "none"; // 모달 창 닫기
     });
-
 
 
 </script>
