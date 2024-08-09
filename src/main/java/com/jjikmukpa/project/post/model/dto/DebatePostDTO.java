@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class PostDTO {
+public class DebatePostDTO {
 
-    private long postNo;
-    private String postTitle;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifyDate;
+    private long debatePostNo;
+    private String debatePostTitle;
+    private LocalDateTime debatePostDate;
     private Member member;
+    private long debatePostCount;
 
 }

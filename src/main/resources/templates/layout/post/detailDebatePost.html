@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>논쟁 상세 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/detaildebatepost.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
+    <h1 class="title"> 논쟁게시판 </h1>
+
+<main>
+    <section class="debate-board">
+        <hr>
+        <h2 th:text ="${ debatePost.postTitle}">제목</h2>
+        <p>
+            작성자 : <span th:text="${debatePost.member.name}">작성자명</span>
+            작성날짜 : <span th:text="${debatePost.createdDate}"> 등록 날짜</span>
+        </p>
+        <hr>
+        <p th:text="${debatePost.content}">내용</p>
+        <hr>
+        <div class="food-options">
+            <div class="option">
+                <h3>[짜장]</h3>
+                <img src="/image/jjajang.png" alt="짜장">
+                <div class="vote-bar">
+                    <span class="option1" style="width: 57%;"></span>
+                </div>
+                <span class="vote-count">230 투표</span>
+            </div>
+            <div class="option">
+                <h3>[짬뽕]</h3>
+                <img src="/image/jjambbong.png" alt="짬뽕">
+                <div class="vote-bar">
+                    <span class="option2" style="width: 43%;"></span>
+                </div>
+                <span class="vote-count">170 투표</span>
+            </div>
+        </div>
+        <hr>
+        <div class="comments">
+            <h4>댓글</h4>
+            <hr>
+            <button id="addCommentButton">댓글 추가</button>
+            <div class="comment">
+                <p>맛있어요! 파스타가 최고!</p>
+                <span class="comment-footer">작성자: user1 | 2023-10-23</span>
+            </div>
+            <div class="comment">
+                <p>짬뽕이 더 맛있죠!</p>
+                <span class="comment-footer">작성자: user2 | 2023-10-22</span>
+            </div>
+
+
+        </div>
+        <hr>
+        <button class="main-debatePost"><a href="/debatePost/debatePostList"> 목록 </a></button>
+        <button id="report">❗신고</button>
+    </section>
+</main>
+</body>
+</html>
