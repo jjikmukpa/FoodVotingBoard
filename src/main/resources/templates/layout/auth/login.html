@@ -28,7 +28,7 @@
                 <label for="remember-id">아이디 저장</label>
             </div>
             <div class="help-links">
-                <a href="#" id="findId">아이디 찾기</a>
+                <a href="/member/findId" id="findId">아이디 찾기</a>
                 <a href="#" id="findPassword">비밀번호 찾기</a>
             </div>
         </div>
@@ -37,6 +37,11 @@
         <button id="loginBtn" type="submit" disabled>로그인</button>
     </form>
     <script>
+        document.getElementById('findId').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = '/member/findId';
+        });
+
         // localStorage에서 저장된 id를 로드
         document.addEventListener('DOMContentLoaded', function() {
             const id = localStorage.getItem('id');
