@@ -13,6 +13,7 @@
 <body style="background-color: #fdcf30">
 <header th:replace="~{/fragments/header :: header}"></header>
 <main class="login-container">
+    <div class="login-div">
     <form id="loginForm" th:action="@{/auth/login}" th:method="post">
         <div class="input-group">
             <label for="memberId">아이디</label>
@@ -22,21 +23,41 @@
             <label for="memberPw">비밀번호</label>
             <input type="password" name="memberPw" id="memberPw" placeholder="비밀번호를 입력하세요">
         </div>
+
+        <p id="errorMsg" th:if="${param.error}" style="color: red;">아이디 또는 비밀번호가 다릅니다.</p>
+
         <div class="additional-options">
             <div class="remember-id">
                 <input type="checkbox" id="remember-id" name="remember-id">
                 <label for="remember-id">아이디 저장</label>
             </div>
             <div class="help-links">
-                <a href="/member/findId" id="findId">아이디 찾기</a>
+                <a href="/member/findId" id="findId">아이디 찾기</a>|
                 <a href="#" id="findPassword">비밀번호 찾기</a>
             </div>
         </div>
 
-        <p id="errorMsg" th:if="${param.error}" style="color: red;">아이디 또는 비밀번호가 다릅니다.</p>
         <button id="loginBtn" type="submit" disabled>로그인</button>
     </form>
+    </div>
+
     <script>
+        // 비어있는 element 있는지 확인
+        function updateLoginBtnState() {
+            const inputs = document.querySelectorAll('#loginForm input:not(#remember-id)');
+            let allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+
+            document.getElementById('loginBtn').disabled = !allFilled;
+        }
+
+        document.getElementById('memberId').addEventListener('input', function() {
+            updateLoginBtnState();
+        });
+
+        document.getElementById('memberPw').addEventListener('input', function() {
+            updateLoginBtnState();
+        });
+
         document.getElementById('findId').addEventListener('click', function(event) {
             event.preventDefault();
             window.location.href = '/member/findId';
@@ -60,23 +81,6 @@
             } else {
                 localStorage.removeItem('id');
             }
-        });
-
-        // 비어있는 element 있는지 확인
-        const inputs = document.querySelectorAll('#loginForm input');
-        function checkInputs() {
-            let flag = true;
-            inputs.forEach(function(input) {
-                if (input.value.trim() === '') {
-                    flag = false;
-                }
-            });
-
-            document.getElementById('loginBtn').disabled = !flag;
-        }
-
-        inputs.forEach(function(input) {
-            input.addEventListener('input', checkInputs);
         });
     </script>
 </main>
