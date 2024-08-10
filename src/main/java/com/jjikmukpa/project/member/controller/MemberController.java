@@ -66,5 +66,11 @@ public class MemberController {
 
     @GetMapping("/mypage")
     public String myPage() {
-        return "layout/member/mypage"; }
+        return "layout/member/mypage";
+    }
+
+    @GetMapping("/findId")
+    public String findId() {
+        return "layout/member/findId";
+    }
 }
