@@ -46,6 +46,18 @@ public class MemberService {
         return member;
     }
 
+    public String findMemberIdByNameAndEmail(String name, String email) {
+        Member member = memberRepository.findMemberByNameAndEmail(name, email)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and email"));
+        return member.getMemberId();
+    }
+
+    public String findMemberIdByNameAndPhone(String name, String phone) {
+        Member member = memberRepository.findMemberByNameAndPhone(name, phone)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and phone"));
+        return member.getMemberId();
+    }
+
     public boolean existsMemberId(String memberId) {
         return memberRepository.existsByMemberId(memberId);
     }
