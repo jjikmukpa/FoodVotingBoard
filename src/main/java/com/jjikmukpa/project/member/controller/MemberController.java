@@ -7,14 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/member")
@@ -72,5 +69,31 @@ public class MemberController {
     @GetMapping("/findId")
     public String findId() {
         return "layout/member/findId";
+    }
+
+    @PostMapping("/findId")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> findId(@RequestParam(required = false) String name1,
+                                                      @RequestParam(required = false) String name2,
+                                                      @RequestParam(required = false) String email,
+                                                      @RequestParam(required = false) String phone,
+                                                      @RequestParam String searchBy) {
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            String memberId = "";
+            if ("email".equals(searchBy)) {
+                memberId = memberService.findMemberIdByNameAndEmail(name2, email);
+            } else if ("phone".equals(searchBy)){
+                memberId = memberService.findMemberIdByNameAndPhone(name1, phone);
+            }
+
+            response.put("memberId", memberId);
+
+            return ResponseEntity.ok(response);
+        } catch (NoSuchElementException e) {
+            response.put("error", "아이디를 찾을 수 없습니다.\n입력하신 정보를 다시 확인해주세요.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 }
