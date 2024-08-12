@@ -3,58 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>일반 게시판</title>
-    <style>
-        .listName{
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ddd;
-            font-weight: bold;
-        }
-        .list{
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 5px;
-            padding: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .list:hover{
-            background-color: #f1f1f1;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/post.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
 </head>
+
+<header th:replace="~{/fragments/header :: header}">
+</header>
+
 <body style="background-color: #e3e17b">
     <h1>음식 게시판</h1>
     <button type="button" th:onclick="|location.href='@{/post/createPost}'|">글쓰기</button>
+    <button class="tab" th:onclick="|location.href='@{/debatePost/debatePostList}'|">논쟁 게시판</button>
 
-<script>
-    function redirectToDetail(postNo) {
-        window.location.href = '/post/detailPost/' + postNo;
-    }
-</script>
+    <form action="/post/postList" method="get" style="display:inline;">
+        <input class="tab4" id="searchInput" name="search" placeholder="검색어를 입력하세요"
+               th:value="${searchTerm != null ? searchTerm : ''}">
+        <select name="searchType">
+            <option value="postTitle" th:selected="${searchType == 'postTitle'}">제목</option>
+            <option value="content" th:selected="${searchType == 'content'}">내용</option>
+            <option value="both" th:selected="${searchType == 'both'}">제목+내용</option>
+        </select>
+        <button class="search-button" type="submit">검색</button>
+    </form>
+
+    <script>
+        function performSearch() {
+            const searchQuery = document.getElementById('searchInput').value;
+            // 검색어가 비어있지 않은 경우에만 요청
+            if (searchQuery.trim() !== "") {
+                window.location.href = '/post/postList?search=' + encodeURIComponent(searchQuery);
+            } else {
+                alert("검색어를 입력하세요.");
+            }
+        }
+    </script>
 
 <div class="listName">
     <p>글번호</p>
     <p>글제목</p>
     <p>글쓴날짜</p>
     <p>글작성자</p>
+    <p>조회수</p>
 </div>
 
-<div class="list" th:each="post : ${ postList } " th:onclick="|redirectToDetail(${post.postNo})|">
-    <p th:text="${ post.postNo } ">
-    </p>
-    <p th:text="${ post.postTitle } ">
-    </p>
-    <p th:text="${ post.createdDate }">
-    </p>
-    <p th:text="${ post.member.name }">
-    </p>
+<div class="list" th:each="post : ${ postList } " th:onclick="|location.href='@{/post/detailPost/{postNo}(postNo=${post.postNo})}'|">
+    <p th:text="${ post.postNo } "></p>
+    <p th:text="${ post.postTitle } "></p>
+    <p th:text="${ post.createdDate }"></p>
+    <p th:text="${ post.member.name }"></p>
+    <p th:text="${ post.postCount}"></p>
 </div>
 
 <div id="paging">
