@@ -28,6 +28,8 @@
     <button type="submit">댓글 달기</button>
 </form>
 
+
+
 <!-- 기존 댓글 목록 -->
 <ul>
     <li th:each="reply : ${replies}">
@@ -35,10 +37,34 @@
         <!--        <p th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm:ss')}">작성 날짜</p>-->
         <p th:text="${reply.replyDate}">등록 날짜</p>
         <p th:text="${reply.replyContent}">내용</p>
+
+<!--        <button type="button" th:onclick="'showEditForm(' + ${reply.replyNo} + ')'" th:text="'수정'">수정</button>-->
+
+<!--        &lt;!&ndash; 댓글 수정 폼 (기본적으로 숨김) &ndash;&gt;-->
+<!--        <div id="editForm-${reply.replyNo}" >-->
+<!--            <form action="/post/updateReply" method="post">-->
+<!--                <input type="hidden" name="replyNo" th:value="${reply.replyNo}"/>-->
+<!--                <textarea name="replyContent" th:text="${reply.replyContent}" placeholder="댓글을 입력하세요"></textarea>-->
+<!--                <button type="submit">댓글 수정</button>-->
+<!--                <button type="button" th:onclick="'hideEditForm(' + ${reply.replyNo} + ')'" th:text="'취소'">취소</button>-->
+<!--            </form>-->
+<!--        </div>-->
+
     </li>
 </ul>
 
-<div th:if="${post.member.memberId} == ${currentUserId}">
+<script>
+    function showEditForm(replyNo) {
+        document.getElementById('editForm-' + replyNo).style.display = 'block';
+    }
+
+    function hideEditForm(replyNo) {
+        document.getElementById('editForm-' + replyNo).style.display = 'none';
+    }
+</script>
+
+
+<div th:if="${post.member.memberId == currentUserId}">
 <button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
 <button id="deleteBtn">삭제</button>
 </div>

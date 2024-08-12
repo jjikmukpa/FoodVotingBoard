@@ -8,6 +8,7 @@ import com.jjikmukpa.project.post.model.dto.CreatePostDTO;
 import com.jjikmukpa.project.post.model.dto.PostDTO;
 import com.jjikmukpa.project.post.model.entity.Post;
 import com.jjikmukpa.project.post.service.PostService;
+import com.jjikmukpa.project.reply.model.dto.ReplyDTO;
 import com.jjikmukpa.project.reply.model.entity.Reply;
 import com.jjikmukpa.project.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class PostController {
 
         // 검색어가 있는 경우 검색 게시글 조회
         if (search != null && !search.isEmpty()) {
-            switch (searchType){
+            switch (searchType) {
                 case "postTitle":
                     postList = postService.searchTitle(search, pageable);
                     break;
@@ -74,7 +75,7 @@ public class PostController {
                     postList = postService.findAll(pageable);
                     break;
             }
-        }else {
+        } else {
             postList = postService.findAll(pageable);
         }
 
@@ -84,65 +85,28 @@ public class PostController {
         // 모델에 데이터 추가
         model.addAttribute("paging", paging);
         model.addAttribute("postList", postList);
-        model.addAttribute("searchType",searchType);
+        model.addAttribute("searchType", searchType);
         model.addAttribute("searchTerm", search != null ? search : ""); // 검색어를 모델에 추가하여 템플릿에서 사용할 수 있도록 함
 
         return "layout/post/post"; // Thymeleaf 템플릿 경로
     }
 
-//    @GetMapping("/detailPost/{postNo}")
-//    public String detailPost(@PathVariable int postNo, @AuthenticationPrincipal UserDetails userDetails,
-//                             Model model) {
-//
-//        Post post = postService.findPostById(postNo);
-//        String currentUserId = userDetails.getUsername();
-//
-//        model.addAttribute("post", post);
-//        model.addAttribute("currentUserId", currentUserId);
-//
-//        return "layout/post/detailPost";
-//    }
-@GetMapping("/detailPost/{postNo}")
-public String getPostDetail(@PathVariable long postNo, Model model) {
-    Post post = postService.findPostById(postNo);
-    List<Reply> replies = replyService.getReplyByPostNo(postNo);
+    @GetMapping("/detailPost/{postNo}")
+    public String getPostDetail(@PathVariable long postNo, Model model,
+                                @AuthenticationPrincipal UserDetails userDetails) {
 
-    model.addAttribute("post", post);
-    model.addAttribute("replies", replies);
-    model.addAttribute("reply", new Reply()); // 댓글을 추가할 폼에 필요한 객체
+        Post post = postService.findPostById(postNo);
+        List<Reply> replies = replyService.getReplyByPostNo(postNo);
+        String currentUserId = userDetails.getUsername(); // 현재 로그인한 사용자의 ID를 가져옵니다
 
-    return "layout/post/detailPost";
-}
 
-    @PostMapping("/addReply")
-    public String addReply(@RequestParam long postNo,
-                             @RequestParam String replyContent,
-                           @AuthenticationPrincipal UserDetails userDetails) {
+        model.addAttribute("currentUserId", currentUserId);
+        model.addAttribute("post", post);
+        model.addAttribute("replies", replies);
+        model.addAttribute("reply", new Reply()); // 댓글을 추가할 폼에 필요한 객체
 
-        String currentUserId = userDetails.getUsername();
-
-        Member member = memberService.findMemberById(currentUserId);
-
-        Reply reply = new Reply();
-        reply.setPost(postService.findPostById(postNo)); // 게시글 설정
-        reply.setReplyContent(replyContent);
-        reply.setReplyDate(LocalDateTime.now()); // 현재 시간 설정
-        reply.setMember(member);
-
-        replyService.saveReply(reply);
-
-        return "redirect:/post/detailPost/" + postNo; // 댓글 추가 후 게시글 상세 페이지로 리디렉션
+        return "layout/post/detailPost";
     }
-
-
-
-
-
-
-
-
-
-
 
     @GetMapping("/modifyPost/{postNo}")
     public String modifyPost(@PathVariable("postNo") long postNo, @AuthenticationPrincipal UserDetails userDetails,
@@ -150,12 +114,9 @@ public String getPostDetail(@PathVariable long postNo, Model model) {
 
         String currentUserId = userDetails.getUsername();
 
-        if (!postService.isPostOwner(postNo, currentUserId)) {
-            model.addAttribute("message", "이 페이지에 접근할 권한이 없습니다.");
-            return "layout/error/accessDenied";
-        }
-
         Post post = postService.findPostById(postNo);
+
+        model.addAttribute("currentUserId", currentUserId);
         model.addAttribute("post", post);
 
         return "layout/post/modifyPost";
@@ -198,4 +159,49 @@ public String getPostDetail(@PathVariable long postNo, Model model) {
         }
     }
 
+    @PostMapping("/addReply")
+    public String addReply(@RequestParam long postNo,
+                           @RequestParam String replyContent,
+                           @AuthenticationPrincipal UserDetails userDetails) {
+
+        String currentUserId = userDetails.getUsername();
+
+        Member member = memberService.findMemberById(currentUserId);
+
+        Reply reply = new Reply();
+        reply.setPost(postService.findPostById(postNo)); // 게시글 설정
+        reply.setReplyContent(replyContent);
+        reply.setReplyDate(LocalDateTime.now()); // 현재 시간 설정
+        reply.setMember(member);
+
+        replyService.saveReply(reply);
+
+        return "redirect:/post/detailPost/" + postNo; // 댓글 추가 후 게시글 상세 페이지로 리디렉션
+    }
+
+
+    @PostMapping("/updateReply")
+    public String updateReply(@RequestParam("replyNo") Long replyNo,
+                              @RequestParam("replyContent") String replyContent,
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              Model model) {
+        // 댓글 수정 로직
+        String currentUserId = userDetails.getUsername();
+        replyService.updateReply(replyNo, replyContent);
+
+        model.addAttribute("currentUserId", currentUserId);
+        return "redirect:/post/detailPost/" + replyService.findPostNoByReplyNo(replyNo);
+    }
+
+    @GetMapping("/editReply/{replyNo}")
+    public String editReply(@PathVariable Long replyNo, Model model) {
+        log.info("🎇🎇🎇🎇🎇🎇🎇");
+        ReplyDTO replyDTO = replyService.findReplyByNo(replyNo);
+
+
+        model.addAttribute("replies", replyService.findRepliesByPostNo(replyDTO.getPost().getPostNo()));
+        model.addAttribute("replyDTO", replyDTO);
+
+        return "layout/post/detailPost";
+    }
 }
