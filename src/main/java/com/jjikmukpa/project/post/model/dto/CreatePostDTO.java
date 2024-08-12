@@ -17,5 +17,4 @@ public class CreatePostDTO {
     private String content;
     private Member member;
 
-
 }
