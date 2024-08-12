@@ -3,6 +3,7 @@ package com.jjikmukpa.project.member.service;
 import com.jjikmukpa.project.member.model.dto.SignupDTO;
 import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.member.model.entity.RoleType;
+import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class MemberService {
                 .phone(signupDTO.getPhone())
                 .address(signupDTO.getAddress())
                 .createdDate(LocalDateTime.now())
-                .status(signupDTO.getStatus())
+                .status(Status.valueOf(signupDTO.getStatus()))  // ACTIVATED, DEACTIVATED,
                 .role(RoleType.valueOf(signupDTO.getRole()))    // USER, ADMIN
                 .build();
 
