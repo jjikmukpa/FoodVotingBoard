@@ -28,12 +28,14 @@ public class Member {
     private String email;
     private String address;
     private String dateOfBirth;
-    private String status = "activated";
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private LocalDateTime deletedDate;
     private LocalDateTime suspendedDate;
     private int suspensionDays;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVATED;
 
     @Enumerated(EnumType.STRING)
     private RoleType role = RoleType.USER;
