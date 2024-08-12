@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,6 @@ public class PostService {
 
         return postList.map(post -> modelMapper.map(post, PostDTO.class));
     }
-
 
 
     public Post findPostById(int postNo) {
@@ -85,5 +86,36 @@ public class PostService {
             return false;
         }
 
+    }
+
+    public Page<PostDTO> findAll(Pageable pageable) {
+
+        // 페이지 번호 조정: 1페이지부터 시작하도록 설정
+        pageable = PageRequest.of(
+                Math.max(pageable.getPageNumber() - 1, 0),
+                10, //페이지 크기 고정
+                Sort.by("postNo").descending()
+        );
+        // 페이징된 DebatePost 목록 조회
+        Page<Post> PostList = postRepository.findAll(pageable);
+
+        // Post를 PostDTO로 변환하여 반환
+        return PostList.map(post -> modelMapper.map(post, PostDTO.class));
+    }
+
+    // 제목+내용 검색하는 기능
+    public Page<PostDTO> searchTitleAndContent(String searchTerm, Pageable pageable) {
+        Page<Post> PostList = postRepository.findByPostTitleContainingOrContentContaining(searchTerm, searchTerm, pageable);
+        return PostList.map(Post -> modelMapper.map(Post, PostDTO.class));
+    }
+
+    public Page<PostDTO> searchTitle(String searchTerm, Pageable pageable) {
+        Page<Post> PostList = postRepository.findByPostTitleContainingIgnoreCase(searchTerm, pageable);
+        return PostList.map(Post -> modelMapper.map(Post, PostDTO.class));
+    }
+
+    public Page<PostDTO> searchContent(String searchTerm, Pageable pageable) {
+        Page<Post> PostList = postRepository.findByContentContainingIgnoreCase(searchTerm, pageable);
+        return PostList.map(Post -> modelMapper.map(Post, PostDTO.class));
     }
 }

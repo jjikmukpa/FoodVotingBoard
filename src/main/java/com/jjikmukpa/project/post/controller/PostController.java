@@ -11,8 +11,10 @@ import com.jjikmukpa.project.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -50,15 +52,40 @@ public class PostController {
     }
 
     @GetMapping("/postList")
-    public String findAllPost(@PageableDefault Pageable pageable, Model model) {
+    public String findAllPost(@PageableDefault Pageable pageable, String search, Model model,
+                              @RequestParam(value = "searchType", required = false) String searchType) {
+        Page<PostDTO> postList;
 
-        Page<PostDTO> postList = postService.findAllPost(pageable);
+        // 검색어가 있는 경우 검색 게시글 조회
+        if (search != null && !search.isEmpty()) {
+            switch (searchType){
+                case "postTitle":
+                    postList = postService.searchTitle(search, pageable);
+                    break;
+                case "content":
+                    postList = postService.searchContent(search, pageable);
+                    break;
+                case "both":
+                    postList = postService.searchTitleAndContent(search, pageable);
+                    break;
+                default:
+                    postList = postService.findAll(pageable);
+                    break;
+            }
+        }else {
+            postList = postService.findAll(pageable);
+        }
+
+        // 페이지네이션 정보
         PagingButtonInfo paging = Pagenation.getPagingButtonInfo(postList);
 
+        // 모델에 데이터 추가
         model.addAttribute("paging", paging);
         model.addAttribute("postList", postList);
+        model.addAttribute("searchType",searchType);
+        model.addAttribute("searchTerm", search != null ? search : ""); // 검색어를 모델에 추가하여 템플릿에서 사용할 수 있도록 함
 
-        return "layout/post/post";
+        return "layout/post/post"; // Thymeleaf 템플릿 경로
     }
 
     @GetMapping("/detailPost/{postNo}")
@@ -69,14 +96,14 @@ public class PostController {
         String currentUserId = userDetails.getUsername();
 
         model.addAttribute("post", post);
-        model.addAttribute("currentUserId",currentUserId);
+        model.addAttribute("currentUserId", currentUserId);
 
         return "layout/post/detailPost";
     }
 
     @GetMapping("/modifyPost/{postNo}")
-        public String modifyPost(@PathVariable("postNo") int postNo, @AuthenticationPrincipal UserDetails userDetails,
-                                 Model model) {
+    public String modifyPost(@PathVariable("postNo") int postNo, @AuthenticationPrincipal UserDetails userDetails,
+                             Model model) {
 
         String currentUserId = userDetails.getUsername();
 
@@ -122,7 +149,7 @@ public class PostController {
         if (isDeleted) {
             redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
             return "redirect:/post/postList";
-        }else {
+        } else {
             redirectAttributes.addFlashAttribute("message", "게시글 삭제에 실패했습니다.");
             return "redirect:/post/detailPost";
         }
