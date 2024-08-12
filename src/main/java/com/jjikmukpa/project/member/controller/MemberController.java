@@ -1,6 +1,8 @@
 package com.jjikmukpa.project.member.controller;
 
 import com.jjikmukpa.project.member.model.dto.SignupDTO;
+import com.jjikmukpa.project.member.model.entity.Member;
+import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,5 +97,16 @@ public class MemberController {
             response.put("error", "아이디를 찾을 수 없습니다.\n입력하신 정보를 다시 확인해주세요.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+    }
+
+    @GetMapping("/checkstatus")
+    public ResponseEntity<Map<String, String>> checkStatus(
+            @RequestParam String memberId) {
+        String status = memberService.getMemberStatus(memberId) + "";
+        log.info("🎀🎀🎀🎀🎀status: " + status);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", status);
+        return ResponseEntity.ok(response);
     }
 }

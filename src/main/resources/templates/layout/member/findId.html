@@ -57,14 +57,14 @@
                     <div class="input-group2">
                         <label for="email">이메일</label>
                         <input type="text" id="email" name="email" placeholder="이메일 입력">
-                        <button type="button" id="verify-email-btn" disabled>인증번호 받기</button>
+                        <button type="button" id="email-button" disabled>인증번호 받기</button>
                     </div>
                     <p id="messageEmail" hidden></p>
 
                     <div id="emailAuthGroup" class="input-group2" style="display: none;">
                         <label for="authCode2">인증번호</label>
                         <input type="text" id="authCode2" name="authCode2" placeholder="인증번호 6자리 숫자 입력">
-                        <button type="button" id="auth-email-btn" disabled>확인</button>
+                        <button type="button" id="verify-button" disabled>확인</button>
                     </div>
                 </div>
 
@@ -81,6 +81,71 @@
         </div>
     </main>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        let emailValid = false;
+
+        $(document).ready(function() {
+            let keyCode = '';
+            $('#email-button').on('click', function(event) {
+                // event.preventDefault();
+                const email = $('#email').val();
+
+                $.ajax({
+                    url: '/sendMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: email }),
+                    success: function(response) {
+                        keyCode = response;
+
+                        // $('#messageEmail').text('Verification code sent to ' + email);
+                        // $('#verificationNum').show();
+                        // $('#verify-div').show();
+                        // $('#verify-button').show();
+                        // $('#verificationNumLabel').show();
+                        document.getElementById('authCode2').value = '';
+
+                        alert("이메일이 전송되었습니다.");
+                    },
+                    error: function(xhr, status, error) {
+                        // $('#messageEmail').text('Error sending verification code.');
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+
+            $('#verify-button').on('click', function(event) {
+                // event.preventDefault();
+                var code = $('#authCode2').val();
+                var email = $('#email').val();
+
+                $.ajax({
+                    url: '/checkMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ key: keyCode, insertKey: code, email: email }),
+                    success: function(response) {
+                        if (response) {
+                            // $('#messageVerifyEmail').show().text('Verification successful!');
+                            alert("인증되었습니다.");
+                            emailValid = true;
+                        } else {
+                            emailValid = false;
+                            // $('#messageVerifyEmail').show().text('Invalid verification code.');
+                            alert("인증 번호가 다릅니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // $('#verifyMessage').text('Error verifying code.');
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         function toggleInputs() {
             const phoneInputs = document.getElementById('phoneInputs');
@@ -108,8 +173,8 @@
 
             document.getElementById('verify-phone-btn').disabled = true;
             document.getElementById('auth-phone-btn').disabled = true;
-            document.getElementById('verify-email-btn').disabled = true;
-            document.getElementById('auth-email-btn').disabled = true;
+            document.getElementById('email-button').disabled = true;
+            document.getElementById('verify-button').disabled = true;
             document.getElementById('nextBtn').disabled = true;
         }
 
@@ -119,8 +184,8 @@
             updateNextBtnState();
         });
 
-        document.getElementById('verify-email-btn').addEventListener('click', function() {
-            document.getElementById('verify-email-btn').disabled = true;
+        document.getElementById('email-button').addEventListener('click', function() {
+            document.getElementById('email-button').disabled = true;
 
             const email = document.getElementById('email').value;
             const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -143,8 +208,8 @@
             updateNextBtnState();
         });
 
-        document.getElementById('auth-email-btn').addEventListener('click', function() {
-            document.getElementById('auth-email-btn').disabled = true;
+        document.getElementById('verify-button').addEventListener('click', function() {
+            document.getElementById('verify-button').disabled = true;
             updateNextBtnState();
         });
 
@@ -175,12 +240,12 @@
 
         document.getElementById('email').addEventListener('input', function() {
             const email = document.getElementById('email').value.trim();
-            document.getElementById('verify-email-btn').disabled = email === '';
+            document.getElementById('email-button').disabled = email === '';
         });
 
         document.getElementById('authCode2').addEventListener('input', function() {
             const authCode2 = document.getElementById('authCode2').value.trim();
-            document.getElementById('auth-email-btn').disabled = authCode2 === '';
+            document.getElementById('verify-button').disabled = authCode2 === '';
         });
 
         document.getElementById('name').addEventListener('input', updateNextBtnState);
@@ -209,8 +274,8 @@
                 const name2 = document.getElementById('name2').value.trim();
                 const email = document.getElementById('email').value.trim();
                 const authCode2 = document.getElementById('authCode2').value.trim();
-                const verifyEmailBtnClicked = document.getElementById('verify-email-btn').disabled;
-                const authEmailBtnClicked = document.getElementById('auth-email-btn').disabled;
+                const verifyEmailBtnClicked = document.getElementById('email-button').disabled;
+                const authEmailBtnClicked = document.getElementById('verify-button').disabled;
 
                 allFieldsFilled = name2 !== '' && email !== '' && authCode2 !== '';
                 allButtonsClicked = verifyEmailBtnClicked && authEmailBtnClicked;

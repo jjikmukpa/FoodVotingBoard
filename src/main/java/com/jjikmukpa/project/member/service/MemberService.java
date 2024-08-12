@@ -67,7 +67,19 @@ public class MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
-    public boolean existsEmail(String email) { return memberRepository.existsByEmail(email); }
+    public boolean existsEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
 
-    public boolean existsPhone(String phone) { return memberRepository.existsByPhone(phone); }
+    public boolean existsPhone(String phone) {
+        return memberRepository.existsByPhone(phone);
+    }
+
+    public Status getMemberStatus(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId);
+        if (member != null) {
+            return member.getStatus();
+        }
+        return Status.UNKNOWN;
+    }
 }
