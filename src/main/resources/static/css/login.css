@@ -1,6 +1,5 @@
 .login-container {
-    margin-left: -1%;
-    margin-top: 10%;
+    margin-top: 7%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,18 +7,29 @@
     width: 100%;
 }
 
-.login-form {
-    background-color: #fdcf30;
-    padding: 20px;
-    border-radius: 10px;
+.login-div {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    height: 100%;
+    padding: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
 }
+
+/*.login-form {*/
+/*    background-color: #fdcf30;*/
+/*    padding: 20px;*/
+/*    border-radius: 10px;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
 
 .input-group {
     font-family: "Black Han Sans", serif;
-    margin: 10px 40px 30px 60px;
+    margin-top: 10px;
+    margin-bottom: 30px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -32,7 +42,7 @@
 }
 
 .input-group input {
-    width: 85%;
+    width: 95%;
     padding: 10px;
     font-size: 1.5em;
     border: 1px solid #ccc;
@@ -45,7 +55,6 @@
 }
 
 .additional-options {
-    width: 103%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -53,7 +62,6 @@
 }
 
 .remember-id {
-    margin-left: 11.5%;
     display: flex;
     align-items: center;
 }
@@ -64,7 +72,7 @@
 
 .help-links {
     display: flex;
-    gap: 10px;
+    gap: 5px;
 }
 
 .help-links a {
@@ -78,22 +86,23 @@
 }
 
 #loginBtn {
-    margin-top: 15%;
-    margin-left: 50%;
+    display: block;
+    margin: 7% auto 0;
     font-family: "Black Han Sans", serif;
     padding: 10px 20px;
     font-size: 1.8em;
-    color: #000000;
+    /*color: #ffffff;*/
     border: none;
     border-radius: 5px;
+    cursor: not-allowed;
+}
+
+#loginBtn:enabled {
+    background-color: #fdcf30;
+    color: #333;
     cursor: pointer;
 }
 
 #memberId, #memberPw{
     font-family: "Black Han Sans", serif;
-}
-
-#errorMsg{
-    margin-left:14.5%;
-    margin-bottom: -5%;
 }

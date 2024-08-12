@@ -3,6 +3,7 @@ package com.jjikmukpa.project.member.service;
 import com.jjikmukpa.project.member.model.dto.SignupDTO;
 import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.member.model.entity.RoleType;
+import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class MemberService {
                 .phone(signupDTO.getPhone())
                 .address(signupDTO.getAddress())
                 .createdDate(LocalDateTime.now())
-                .status(signupDTO.getStatus())
+                .status(Status.valueOf(signupDTO.getStatus()))  // ACTIVATED, DEACTIVATED,
                 .role(RoleType.valueOf(signupDTO.getRole()))    // USER, ADMIN
                 .build();
 
@@ -44,6 +45,18 @@ public class MemberService {
                 .orElseThrow(() -> new NoSuchElementException("회원을 찾을 수 없습니다."));
 
         return member;
+    }
+
+    public String findMemberIdByNameAndEmail(String name, String email) {
+        Member member = memberRepository.findMemberByNameAndEmail(name, email)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and email"));
+        return member.getMemberId();
+    }
+
+    public String findMemberIdByNameAndPhone(String name, String phone) {
+        Member member = memberRepository.findMemberByNameAndPhone(name, phone)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and phone"));
+        return member.getMemberId();
     }
 
     public boolean existsMemberId(String memberId) {
