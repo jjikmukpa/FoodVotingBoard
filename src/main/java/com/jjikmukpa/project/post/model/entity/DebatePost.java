@@ -24,8 +24,6 @@ public class DebatePost {
 
     private LocalDateTime createdDate;
 
-    private String imagePath1; // 이미지 경로 필드
-    private String imagePath2; // 이미지 경로 필드
 
     private long postCount ; // 조회수
 
