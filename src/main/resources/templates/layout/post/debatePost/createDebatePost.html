@@ -10,15 +10,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
     <script defer th:src="@{/js/createdebatepost.js}"></script>
-
 </head>
 <body>
 
 <header th:replace="~{/fragments/header :: header}">
 </header>
 
-<form th:action="@{/debatePost/create}" method="post">
+<form th:action="@{/debatePost/create}" method="post" enctype="multipart/form-data">
     <h1 class="title">논쟁 게시판 글쓰기</h1>
 
     <div class="form-group">
@@ -35,9 +35,9 @@
         <span>이미지 추가하기:</span>
         <div class="button-container">
             <label for="file1">새 사진 추가하기</label>
-            <input type="file" id="file1" accept="image/*" onchange="previewImage(event, 'preview1')">
+            <input type="file" id="file1" name="file1" accept="image/*" onchange="previewImage(event, 'preview1')">
             <label for="file2">새 사진 추가하기</label>
-            <input type="file" id="file2" accept="image/*" onchange="previewImage(event, 'preview2')">
+            <input type="file" id="file2" name="file2" accept="image/*" onchange="previewImage(event, 'preview2')">
         </div>
         <div class="image-preview">
             <img id="preview1" src="" alt="Image Preview" style="display:none;">
@@ -45,8 +45,8 @@
         </div>
     </div>
     <div class="form-buttons">
-        <button class="submit-button">임시저장</button>
-        <button class="reset-button">저장</button>
+        <button class="submit-button" onclick="confirmTemporarySave(event)">임시저장</button>
+        <button class="reset-button" onclick="confirmSave(event)">저장</button>
     </div>
 
 </form>

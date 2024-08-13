@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>논쟁 상세 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/detaildebatepost.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
+    <h1 class="title"> 논쟁게시판 </h1>
+
+<main>
+    <section class="debate-board">
+        <hr>
+        <h2 th:text ="${ debatePost.postTitle}">제목</h2>
+        <p>
+            작성자 : <span th:text="${debatePost.member.name}+ ' | '">작성자명</span>
+            작성날짜 : <span th:text="${debatePost.createdDate}"> 등록 날짜</span>
+        </p>
+        <hr>
+        <p th:text="${debatePost.content}">내용</p>
+        <hr>
+
+        <!-- 이미지 표시 -->
+        <div class="image-container">
+            <img th:src="@{${debatePost.image1Path}}" alt="게시물 이미지 1" style="max-width: 100%; height: auto;">
+            <img th:src="@{${debatePost.image2Path}}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;">
+        </div>
+
+
+        <hr>
+        <button class="main-debatePost"><a href="/debatePost/debatePostList"> 목록 </a></button>
+        <button id="report">❗신고</button>
+    </section>
+</main>
+</body>
+</html>
