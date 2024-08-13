@@ -5,7 +5,6 @@
     <title>논쟁 상세 페이지</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" th:href="@{/css/detaildebatepost.css}"/>
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +30,16 @@
 
         <!-- 이미지 표시 -->
         <div class="image-container">
-            <img th:src="@{${debatePost.image1Path}}" alt="게시물 이미지 1" style="max-width: 100%; height: auto;">
-            <img th:src="@{${debatePost.image2Path}}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;">
+            <img th:src="${debatePost.imagePath1}"  alt="게시물 이미지 1" style="max-width: 100%; height: auto;" onclick="voteImage('image1')" >
+            <img th:src="${debatePost.imagePath2}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;" onclick="voteImage('image2')">
         </div>
 
+        <!-- 투표 현황 표시 -->
+        <div id="vote-container">
+            <strong>현재 투표 현황:</strong><br>
+             1번: 0표<br>
+             2번: 0표
+        </div>
 
         <hr>
         <button class="main-debatePost"><a href="/debatePost/debatePostList"> 목록 </a></button>

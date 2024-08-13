@@ -9,14 +9,6 @@
 
 }
 
-.tab3{
-    justify-content: flex-end;
-    margin-left: 80%;
-}
-
-.tab4{
-    justify-content: flex-end;
-}
 
 table {
     width: 100%; /* 테이블이 부모 요소의 전체 너비를 차지하도록 설정 */
