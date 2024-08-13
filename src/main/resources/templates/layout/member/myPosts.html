@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 게시글</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myPosts.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
+<h1>내 게시글</h1>
+
+<h2>일반 게시판</h2>
+<div class="listName">
+    <p>글번호</p>
+    <p>글제목</p>
+    <p>글쓴날짜</p>
+    <p>글작성자</p>
+    <p>조회수</p>
+</div>
+<div class="list" th:each="post : ${ postList }" th:onclick="|location.href='@{/post/detailPost/{postNo}(postNo=${post.postNo})}'|">
+    <p th:text="${ post.postNo }"></p>
+    <p th:text="${ post.postTitle }"></p>
+    <p th:text="${ post.createdDate }"></p>
+    <p th:text="${ post.member.name }"></p>
+    <p th:text="${ post.postCount }"></p>
+</div>
+
+<h2>논쟁 게시판</h2>
+<div class="listName">
+    <p>글번호</p>
+    <p>글제목</p>
+    <p>글쓴날짜</p>
+    <p>글작성자</p>
+    <p>조회수</p>
+</div>
+<div class="list" th:each="debatePost : ${ debatePostList }" th:onclick="|location.href='@{/debatePost/detailDebatePost/{debatePostNo}(debatePostNo=${debatePost.debatePostNo})}'|">
+    <p th:text="${ debatePost.debatePostNo }"></p>
+    <p th:text="${ debatePost.debatePostTitle }"></p>
+    <p th:text="${ debatePost.debatePostDate }"></p>
+    <p th:text="${ debatePost.member.name }"></p>
+    <p th:text="${ debatePost.debatePostCount }"></p>
+</div>
+
+</body>
+</html>

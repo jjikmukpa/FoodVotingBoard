@@ -1,5 +1,6 @@
 package com.jjikmukpa.project.post.repository;
 
+import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.post.model.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByPostTitleContainingIgnoreCase(String title, Pageable pageable);
 
     Page<Post> findByContentContainingIgnoreCase(String content, Pageable pageable);
+
+    Page<Post> findByMember(Member member, Pageable pageable);
 
 }

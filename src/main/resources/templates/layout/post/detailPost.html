@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <title>일반 게시판 상세 페이지</title>
     <link rel="stylesheet" href="/css/detailPostModal.css">
-
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
 
 <div>
     <h2 th:text ="${ post.postTitle}">제목</h2>

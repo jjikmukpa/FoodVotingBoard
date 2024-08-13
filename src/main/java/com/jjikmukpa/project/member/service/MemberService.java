@@ -97,4 +97,17 @@ public class MemberService {
     public void save(Member member) {
         memberRepository.save(member);
     }
+
+    public boolean checkPassword(String memberId, String rawPassword) {
+        Member member = findMemberById(memberId);
+        return passwordEncoder.matches(rawPassword, member.getMemberPw());
+    }
+
+    @Transactional
+    public void changePassword(String memberId, String newPassword) {
+        Member member = findMemberById(memberId);
+        member.setMemberPw(passwordEncoder.encode(newPassword));
+        save(member);
+    }
+
 }

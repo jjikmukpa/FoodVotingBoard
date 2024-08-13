@@ -2,8 +2,11 @@ package com.jjikmukpa.project.post.service;
 
 import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.post.model.dto.CreatePostDTO;
+import com.jjikmukpa.project.post.model.dto.DebatePostDTO;
 import com.jjikmukpa.project.post.model.dto.PostDTO;
+import com.jjikmukpa.project.post.model.entity.DebatePost;
 import com.jjikmukpa.project.post.model.entity.Post;
+import com.jjikmukpa.project.post.repository.DebatePostRepository;
 import com.jjikmukpa.project.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -117,4 +120,11 @@ public class PostService {
         Page<Post> PostList = postRepository.findByContentContainingIgnoreCase(searchTerm, pageable);
         return PostList.map(Post -> modelMapper.map(Post, PostDTO.class));
     }
+
+    public Page<PostDTO> findPostsByMember(Member member, Pageable pageable) {
+        Page<Post> postList = postRepository.findByMember(member, pageable);
+        return postList.map(post -> modelMapper.map(post, PostDTO.class));
+    }
+
+
 }
