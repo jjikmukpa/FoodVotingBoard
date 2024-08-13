@@ -32,30 +32,14 @@ public class DebatePostController {
     private final MemberService memberService;
 
     @PostMapping("/create")
-    public String createPost(@AuthenticationPrincipal UserDetails userDetails, CreateDebatePostDTO createdebatepostDTO,
-                             @RequestParam("debatePostTitle") String title,
-                             @RequestParam("content") String content,
-                             @RequestParam("file1") MultipartFile file1,
-                             @RequestParam("file2") MultipartFile file2) {
+    public String createPost(@AuthenticationPrincipal UserDetails userDetails, CreateDebatePostDTO createdebatepostDTO
+                            ) {
 
-        DebatePost debatePost = new DebatePost();
-        debatePost.setPostTitle(title);
-        debatePost.setContent(content);
+
 
         String memberId = userDetails.getUsername();
         Member member = memberService.findMemberById(memberId);
         log.info("member : {}", member.getName());
-
-        //이미지 파일 저장
-        String imagePath1 = debatepostService.saveImage(file1);
-        String imagePath2 = debatepostService.saveImage(file2);
-
-        // 이미지 경로를 게시물에 설정
-        debatePost.setImagePath1(imagePath1);
-        debatePost.setImagePath2(imagePath2);
-
-        // 게시물 저장
-        debatepostService.saveDebatePost(debatePost);
 
         debatepostService.createDebatePost(createdebatepostDTO,member);
 

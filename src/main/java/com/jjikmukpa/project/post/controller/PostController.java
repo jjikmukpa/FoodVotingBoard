@@ -136,16 +136,9 @@ public class PostController {
 
     @PostMapping("/delete/{postNo}")
     public String deletePost(@PathVariable("postNo") int postNo,
-                             @AuthenticationPrincipal UserDetails userDetails,
                              RedirectAttributes redirectAttributes,
                              Model model) {
 
-        String currentUserId = userDetails.getUsername();
-
-        if (!postService.isPostOwner(postNo, currentUserId)) {
-            model.addAttribute("message", "권한이 없습니다.");
-            return "layout/error/accessDenied";
-        }
 
         boolean isDeleted = postService.deletePost(postNo);
 
@@ -154,7 +147,7 @@ public class PostController {
             return "redirect:/post/postList";
         } else {
             redirectAttributes.addFlashAttribute("message", "게시글 삭제에 실패했습니다.");
-            return "redirect:/post/detailPost";
+            return "redirect:/post/detailPost/" + postNo;
         }
     }
 

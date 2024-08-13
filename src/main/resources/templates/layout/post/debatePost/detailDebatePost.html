@@ -28,11 +28,11 @@
         <p th:text="${debatePost.content}">내용</p>
         <hr>
 
-        <!-- 이미지 표시 -->
-        <div class="image-container">
-            <img th:src="${debatePost.imagePath1}"  alt="게시물 이미지 1" style="max-width: 100%; height: auto;" onclick="voteImage('image1')" >
-            <img th:src="${debatePost.imagePath2}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;" onclick="voteImage('image2')">
-        </div>
+<!--        &lt;!&ndash; 이미지 표시 &ndash;&gt;-->
+<!--        <div class="image-container">-->
+<!--            <img th:src="${debatePost.imagePath1}"  alt="게시물 이미지 1" style="max-width: 100%; height: auto;" onclick="voteImage('image1')" >-->
+<!--            <img th:src="${debatePost.imagePath2}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;" onclick="voteImage('image2')">-->
+<!--        </div>-->
 
         <!-- 투표 현황 표시 -->
         <div id="vote-container">

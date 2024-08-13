@@ -38,7 +38,7 @@ public class Post {
 
     private String blindStatus;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Reply> replies;  // 댓글 목록
 
 }
