@@ -15,9 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class PostService {
     }
 
 
-    public Post findPostById(int postNo) {
+    public Post findPostById(long postNo) {
 
         Post post = postRepository.findById(postNo)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
@@ -59,7 +58,7 @@ public class PostService {
         return post;
     }
 
-    public void updatePost(int postNo, String postTitle, String content, LocalDateTime modifyDate){
+    public void updatePost(long postNo, String postTitle, String content, LocalDateTime modifyDate){
 
         Post post = findPostById(postNo);
 
@@ -70,12 +69,12 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public boolean isPostOwner(int postNo, String memberId) {
+    public boolean isPostOwner(long postNo, String memberId) {
         Post post = findPostById(postNo);
         return post.getMember().getMemberId().equals(memberId);
     }
 
-    public boolean deletePost(int postNo) {
+    public boolean deletePost(long postNo) {
         // 실제 데이터베이스에서 게시글을 삭제하는 로직을 구현
         try {
             if (postRepository.existsById(postNo)) {

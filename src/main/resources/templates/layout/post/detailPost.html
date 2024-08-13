@@ -3,31 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>일반 게시판 상세 페이지</title>
-    <link rel="stylesheet" href="/css/detailPostModal.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/detailPostModal.css}">
     <script defer th:src="@{/js/main.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}">
 </header>
 
-<div>
+<h1>음식 게시판</h1>
+<div id="detailPost">
     <h2 th:text ="${ post.postTitle}">제목</h2>
-    <p th:text="${post.createdDate}">등록 날짜</p>
-<!--    <p th:if="${post.createdDate != null}" th:text="${#dates.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}">등록 날짜</p>-->
-<!--    <p th:if="${post.createdDate == null}">날짜 정보 없음</p>-->
-    <p>작성자 : <span th:text="${post.member.name}">작성자명</span></p>
-    <p th:text="${post.content}">내용</p>
+    <p id="createDate" th:text="${post.createdDate}">등록 날짜</p>
+    <p id="name"><span th:text="${post.member.name}">작성자명</span></p>
+    <p id="content" th:text="${post.content}">내용</p>
+    <p id="postCount" th:text="${post.postCount}">조회수</p>
 </div>
 
 <a href="/post/postList">목록으로 돌아가기</a>
 
-<div th:if="${post.member.memberId} == ${currentUserId}">
-<button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
-<button id="deleteBtn">삭제</button>
+<h2>댓글</h2>
+
+<!-- 댓글 작성 폼 -->
+<form action="/post/addReply" method="post">
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+    <textarea name="replyContent" placeholder="댓글을 입력하세요"></textarea>
+    <button type="submit">댓글 달기</button>
+</form>
+
+<!-- 기존 댓글 목록 -->
+<div th:each="reply : ${replies}">
+    <p th:text="${reply.member.name}">작성자</p>
+    <!--        <p th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd HH:mm:ss')}">작성 날짜</p>-->
+    <p th:text="${reply.replyDate}">등록 날짜</p>
+    <p id="replyContent-${reply.replyNo}" th:text="${reply.replyContent}">내용</p>
+</div>
+
+
+<div th:if="${post.member.memberId == currentUserId}">
+    <button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
+    <button id="deleteBtn">삭제</button>
 </div>
 
 <!-- 삭제 확인 모달 -->
@@ -68,7 +87,7 @@
 
     // 모달 창에서 확인 버튼 클릭 시
     alertCloseBtn.addEventListener("click", function() {
-         confirmModal.style.display = "none";
+        confirmModal.style.display = "none";
         // 삭제 완료 모달 표시
         alertModal.style.display = "block";
     });
