@@ -75,9 +75,9 @@ public class WebSecurityConfig {
                     .usernameParameter("memberId")      // userName으로 전달할 파라미터 설정
                     .passwordParameter("memberPw")      // password로 전달할 파라미터 설정
                     .defaultSuccessUrl("/")             // 로그인 성공 시 이동할 url
-                    .failureUrl("/auth/login?error=true")
+                    .failureUrl("/auth/login?error=true");
 //                    .failureHandler(customAuthenticationFailureHandler)
-                    .permitAll();
+//                    .permitAll();
             });
 
 //        http.addFilterBefore(new CustomUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
