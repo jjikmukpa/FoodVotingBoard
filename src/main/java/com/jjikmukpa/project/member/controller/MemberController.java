@@ -1,6 +1,7 @@
 package com.jjikmukpa.project.member.controller;
 
 import com.jjikmukpa.project.member.model.dto.SignupDTO;
+import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,6 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
-
-
 
     @GetMapping("/register")
     public String register() { return "layout/member/signup"; }
@@ -105,6 +104,16 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/checkstatus")
+    public ResponseEntity<Map<String, String>> checkStatus(
+            @RequestParam String memberId) {
+        String status = memberService.getMemberStatus(memberId) + "";
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", status);
+        return ResponseEntity.ok(response);
+    }
+  
     /* mypage 작업 영역 */
     @GetMapping("/mypage")
     public String myPage() {
@@ -161,6 +170,6 @@ public class MemberController {
 
     @GetMapping("/changePw")
     public String changePw() {
-        return "layout/member/changePw"; }
-
+        return "layout/member/changePw"; 
+    }
 }
