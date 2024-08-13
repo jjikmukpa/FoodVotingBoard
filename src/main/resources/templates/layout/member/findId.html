@@ -98,18 +98,11 @@
                     data: JSON.stringify({ email: email }),
                     success: function(response) {
                         keyCode = response;
-
-                        // $('#messageEmail').text('Verification code sent to ' + email);
-                        // $('#verificationNum').show();
-                        // $('#verify-div').show();
-                        // $('#verify-button').show();
-                        // $('#verificationNumLabel').show();
                         document.getElementById('authCode2').value = '';
 
                         alert("이메일이 전송되었습니다.");
                     },
                     error: function(xhr, status, error) {
-                        // $('#messageEmail').text('Error sending verification code.');
                         console.error('Error:', error);
                         alert("에러: " + error);
                     }
@@ -128,17 +121,18 @@
                     data: JSON.stringify({ key: keyCode, insertKey: code, email: email }),
                     success: function(response) {
                         if (response) {
-                            // $('#messageVerifyEmail').show().text('Verification successful!');
                             alert("인증되었습니다.");
                             emailValid = true;
                         } else {
                             emailValid = false;
-                            // $('#messageVerifyEmail').show().text('Invalid verification code.');
+
+                            document.getElementById('verify-button').disabled = false;
+                            updateNextBtnState();
+
                             alert("인증 번호가 다릅니다.");
                         }
                     },
                     error: function(xhr, status, error) {
-                        // $('#verifyMessage').text('Error verifying code.');
                         console.error('Error:', error);
                         alert("에러: " + error);
                     }
