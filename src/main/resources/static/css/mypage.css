@@ -46,12 +46,95 @@ body{
     height: 100%; /* 부모 요소의 높이를 가득 채움 */
 }
 
-.mypage_menu1 a:hover {
+#deleteButton{
+    font-family: "Black Han Sans", serif;
+    font-size: 1em; /* 텍스트 크기 */
+    background: none;
+    border: none;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;"
+}
+
+.mypage_menu1 a:hover, #logout_button2:hover, #deleteButton:hover {
     color: #4fa8da;
 }
 
-.mypage_menu1 a:active {
+.mypage_menu1 a:active, #logout_button2:active, #deleteButton:active {
     transform: scale(0.8); /* 클릭 시 작아짐 */
     color: #103d55;
     cursor: pointer;
+}
+
+#logout_button2{
+    font-family: "Black Han Sans", serif;
+    font-size: 1em; /* 텍스트 크기 */
+    background: none;
+    border: none;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;"
+}
+
+/* 모달을 감싸고 있는 검은색 배경 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* 모달 창 */
+.modal-content {
+    text-align: center;
+    align-items: center;
+    background-color: #fefefe;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 8px;
+    transform: translate(-50%, -50%);
+    width: 400px; /* 너비 고정 */
+    padding: 20px;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+}
+
+#realOut{
+    text-align: center;
+    margin-left: 45px;
+    font-size: 1.4em;
+}
+
+/* x 클릭 */
+.close {
+    margin-top: -10px;
+    padding-right: 10px;
+    color: #aaa;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content button {
+    font-family: "Black Han Sans", serif;
+    font-size: 1.2em;
+    background: #fdcf30;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px 15px;
 }

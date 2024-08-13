@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 변경</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/changePW.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+</head>
+<body>
+    <header th:replace="~{/fragments/header :: header}"></header>
+
+    <main class="changePw-container">
+        <div class="changePw-div">
+            <form id="changePwForm" th:action="@{/member/changPw}" th:method="post">
+                <span>비밀번호 변경</span>
+            <div class="input-group" >
+                <p>안전한 비밀번호로 내정보를 보호하세요.<br>
+                    다른 아이디/사이트에서 사용한 적 없는 비밀번호, 이전에 사용한 적 없는 비밀번호가 안전합니다.<br></p>
+            </div>
+            <div>
+                <a>현재 비밀번호 <input type="text" id="nowPw" name="nowPw" placeholder="현재 비밀번호를 입력하세요"></a>
+            </div>
+            <div>
+                <a>변경할 비밀번호 <input type="text" id="afterPw" name="afterPw" placeholder="변경할 비밀번호를 입력하세요"></a>
+            </div>
+            <div>
+                <a>변경할 비밀번호 확인 <input type="text" id="afterPwC" name="afterPwC" placeholder="변경할 비밀번호를 한 번더 입력하세요"></a>
+            </div>
+            <!--                <button onclick="confirmAndRedirect()">확인</button>-->
+            </form>
+        </div>
+    </main>
+</body>
+</html>

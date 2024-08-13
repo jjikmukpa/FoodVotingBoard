@@ -5,8 +5,11 @@ import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.member.model.entity.RoleType;
 import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -70,4 +74,15 @@ public class MemberService {
     public boolean existsEmail(String email) { return memberRepository.existsByEmail(email); }
 
     public boolean existsPhone(String phone) { return memberRepository.existsByPhone(phone); }
+
+
+    /* mypage 작업 영역 */
+    public Member getLoggedInMember() {
+        String memberId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberRepository.findMemberByMemberId(memberId).orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+    }
+
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
 }
