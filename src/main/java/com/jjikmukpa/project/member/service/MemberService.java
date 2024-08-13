@@ -67,6 +67,16 @@ public class MemberService {
         return memberRepository.existsByMemberId(memberId);
     }
 
+    public boolean isPasswordInUse(String memberId, String rawPassword) {
+        Member member = memberRepository.findByMemberId(memberId);
+        if (member == null) {
+            return false;
+        }
+
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        return passwordEncoder.matches(rawPassword, member.getMemberPw());
+    }
+
     public boolean existsNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
@@ -79,6 +89,14 @@ public class MemberService {
         return memberRepository.existsByPhone(phone);
     }
 
+    public boolean existsByMemberIdAndNameAndEmail(String memberId, String name, String email) {
+        return memberRepository.existsByMemberIdAndNameAndEmail(memberId, name, email);
+    }
+
+    public boolean existsByMemberIdAndNameAndPhone(String memberId, String name, String phone) {
+        return memberRepository.existsByMemberIdAndNameAndPhone(memberId, name, phone);
+    }
+
     public Status getMemberStatus(String memberId) {
         Member member = memberRepository.findByMemberId(memberId);
         if (member != null) {
@@ -86,6 +104,20 @@ public class MemberService {
         }
       
         return Status.UNKNOWN;
+    }
+
+    public void updatePassword(String memberId, String modifiedPw) {
+//        Member member = memberRepository.findByMemberId(memberId);
+
+        String encodedPassword = passwordEncoder.encode(modifiedPw);
+        int updatedCount = memberRepository.updateMemberPwByMemberId(memberId, encodedPassword);
+
+        // 업데이트가 실행 안되었을 때
+        if (updatedCount == 0) {
+            throw new NoSuchElementException("존재하지 않는 회원입니다.");
+        }
+
+//        memberRepository.save(member);
     }
 
     /* mypage 작업 영역 */
