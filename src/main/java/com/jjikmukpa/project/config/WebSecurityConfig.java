@@ -55,6 +55,8 @@ public class WebSecurityConfig {
                     .requestMatchers("/member/checkuser").anonymous()
                     .requestMatchers("/member/checkstatus").anonymous()
                     .requestMatchers("/member/findId").anonymous()
+                    .requestMatchers("/member/findPw").anonymous()
+                    .requestMatchers("/member/changePwNotLoggedIn").anonymous()
                     .requestMatchers("/post/postList","/post/detailPost/**").permitAll()
                     .requestMatchers("/post/createPost","/post/modifyPost/**","/post/delete/**").authenticated()
                     .requestMatchers("/admin/**").hasRole("ADMIN")      // ROLE이 ADMIN인 경우만 접근 가능

@@ -33,7 +33,7 @@
             </div>
             <div class="help-links">
                 <a href="/member/findId" id="findId">아이디 찾기</a>|
-                <a href="#" id="findPassword">비밀번호 찾기</a>
+                <a href="/member/findPw" id="findPw">비밀번호 찾기</a>
             </div>
         </div>
 
@@ -87,6 +87,11 @@
         document.getElementById('findId').addEventListener('click', function(event) {
             event.preventDefault();
             window.location.href = '/member/findId';
+        });
+
+        document.getElementById('findPw').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = '/member/findPw';
         });
 
         // localStorage에서 저장된 id를 로드

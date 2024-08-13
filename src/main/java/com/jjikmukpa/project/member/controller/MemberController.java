@@ -115,6 +115,39 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/findPw")
+    public String findPw() {
+        return "layout/member/findPw";
+    }
+
+    @PostMapping("/findPw")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> findPw(@RequestParam(required = false) String id1,
+                                                       @RequestParam(required = false) String name1,
+                                                       @RequestParam(required = false) String name2,
+                                                       @RequestParam(required = false) String id2,
+                                                       @RequestParam(required = false) String email,
+                                                       @RequestParam(required = false) String phone,
+                                                       @RequestParam String searchBy) {
+        Map<String, Boolean> response = new HashMap<>();
+
+        try {
+            boolean exists = false;
+            if ("email".equals(searchBy)) {
+                exists = memberService.existsByMemberIdAndNameAndEmail(id2, name2, email);
+            } else if ("phone".equals(searchBy)){
+                exists = memberService.existsByMemberIdAndNameAndPhone(id1, name1, phone);
+            }
+
+            response.put("exists", exists);
+
+            return ResponseEntity.ok(response);
+        } catch (NoSuchElementException e) {
+            response.put("error", false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
     @GetMapping("/checkstatus")
     public ResponseEntity<Map<String, String>> checkStatus(
             @RequestParam String memberId) {
@@ -122,6 +155,48 @@ public class MemberController {
 
         Map<String, String> response = new HashMap<>();
         response.put("status", status);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/changePwNotLoggedIn")
+    public String changePwNotLoggedIn(@RequestParam String id, Model model) {
+        model.addAttribute("id", id);
+
+        return "layout/member/changePwNotLoggedIn";
+    }
+
+    @PostMapping("/changePwNotLoggedIn")
+    public ResponseEntity<Map<String, String>> changePwNotLoggedIn(
+                                        @RequestParam String userId,
+                                        @RequestParam String modifiedPw,
+                                        @RequestParam String modifiedPwConfirm) {
+        Map<String, String> response = new HashMap<>();
+
+        // 서버사이드에서도 확인
+        if (modifiedPw == null || modifiedPwConfirm == null || !modifiedPw.equals(modifiedPwConfirm)) {
+            response.put("error", "비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String regexPw = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
+        if (!modifiedPw.matches(regexPw)) {
+            response.put("error", "비밀번호는 최소 8자 이상이어야 하며, 적어도 하나의 문자, 숫자 및 특수 문자를 포함해야 합니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (memberService.isPasswordInUse(userId, modifiedPw)) {
+            log.info("🌊🌊🌊🌊🌊🌊🌊🌊🌊 Existing password is being reused.");
+            response.put("error", "기존과 같은 비밀번호는 사용하실 수 없습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        try {
+            memberService.updatePassword(userId, modifiedPw);
+            response.put("success", "비밀번호가 성공적으로 변경되었습니다.");
+        } catch (NoSuchElementException e) {
+            response.put("error", "존재하지 않는 회원입니다.");
+        }
+
         return ResponseEntity.ok(response);
     }
   
