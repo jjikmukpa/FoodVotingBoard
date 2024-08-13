@@ -1,61 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>일반 게시판</title>
-    <style>
-        .listName{
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ddd;
-            font-weight: bold;
-        }
-        .list{
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 5px;
-            padding: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .list:hover{
-            background-color: #f1f1f1;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/post.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+
+
 </head>
-<body style="background-color: #e3e17b">
-    <h1>음식 게시판</h1>
-    <button type="button" th:onclick="|location.href='@{/post/createPost}'|">글쓰기</button>
+<body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
+
+<h1>음식 게시판</h1>
+<div class="createPost-container">
+    <button id="createPost" type="button" th:onclick="|location.href='@{/post/createPost}'|">✏글쓰기</button>
+    <button class="tab" th:onclick="|location.href='@{/debatePost/debatePostList}'|">논쟁 게시판</button>
+
+    <form id="ad" action="/post/postList" method="get" style="display:inline;">
+        <input class="tab4" id="searchInput" name="search" placeholder="검색어를 입력하세요"
+               th:value="${searchTerm != null ? searchTerm : ''}">
+        <select name="searchType">
+            <option value="postTitle" th:selected="${searchType == 'postTitle'}">제목</option>
+            <option value="content" th:selected="${searchType == 'content'}">내용</option>
+            <option value="both" th:selected="${searchType == 'both'}">제목+내용</option>
+        </select>
+        <button class="search-button" type="submit">검색</button>
+    </form>
+</div>
+
 
 <script>
-    function redirectToDetail(postNo) {
-        window.location.href = '/post/detailPost/' + postNo;
+    function performSearch() {
+        const searchQuery = document.getElementById('searchInput').value;
+        // 검색어가 비어있지 않은 경우에만 요청
+        if (searchQuery.trim() !== "") {
+            window.location.href = '/post/postList?search=' + encodeURIComponent(searchQuery);
+        } else {
+            alert("검색어를 입력하세요.");
+        }
     }
 </script>
 
-<div class="listName">
-    <p>글번호</p>
-    <p>글제목</p>
-    <p>글쓴날짜</p>
-    <p>글작성자</p>
-</div>
+<table>
+    <tr>
+        <th>글번호</th>
+        <th>글제목</th>
+        <th>글쓴날짜</th>
+        <th>글작성자</th>
+        <th>조회수</th>
+    </tr>
+    <tr class="list" th:each="post : ${ postList } " th:onclick="|location.href='@{/post/detailPost/{postNo}(postNo=${post.postNo})}'|">
+        <td th:text="${ post.postNo } "></td>
+        <td th:text="${ post.postTitle } "></td>
+        <td th:text="${ post.createdDate }"></td>
+        <td th:text="${ post.member.name }"></td>
+        <td th:text="${ post.postCount}"></td>
+    </tr>
+</table>
 
-<div class="list" th:each="post : ${ postList } " th:onclick="|redirectToDetail(${post.postNo})|">
-    <p th:text="${ post.postNo } ">
-    </p>
-    <p th:text="${ post.postTitle } ">
-    </p>
-    <p th:text="${ post.createdDate }">
-    </p>
-    <p th:text="${ post.member.name }">
-    </p>
-</div>
 
 <div id="paging">
     <!-- 맨 앞으로 이동 -->

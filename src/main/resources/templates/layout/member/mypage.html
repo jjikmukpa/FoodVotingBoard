@@ -19,10 +19,10 @@
 <h1 class="mypage_title">마이페이지</h1>
     <div class="mypage_menu">
         <div class="mypage_menu1">
-            <a th:href="@{/}">나의 정보</a><br>
+            <a th:href="@{/member/info}">나의 정보</a><br>
         </div>
         <div class="mypage_menu1">
-            <a th:href="@{/}">내 게시글</a><br>
+            <a th:href="@{/member/myPosts}">내 게시글</a><br>
         </div>
         <div class="mypage_menu1">
             <a th:href="@{/}">내 임시 저장 글</a><br>
@@ -34,11 +34,55 @@
             <a th:href="@{/}">내 추천</a><br>
         </div>
         <div class="mypage_menu1">
-            <a th:href="@{/}">로그아웃</a><br>
+        <form th:action="@{/auth/logout}" method="post">
+            <button id="logout_button2">로그아웃</button>
+        </form>
         </div>
+        <div class="mypage_menu1" >
+            <button id="deleteButton">회원 탈퇴</button>
+        </div>
+
         <div class="mypage_menu1">
-            <a th:href="@{/}">회원 탈퇴</a>
+            <a th:href="@{/}">뒤로가기</a><br>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="realOut">진짜 탈퇴하시겠습니까?</p>
+            <form id="deleteForm" th:action="@{/member/delete}" method="post">
+                <button type="submit" id="okButton">예</button>
+                <button type="button" id="cancelButton">아니오</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 모달 관련 JavaScript 코드
+        const modal = document.getElementById("confirmationModal");
+        const deleteButton = document.getElementById("deleteButton");
+        const closeButton = document.querySelector(".close");
+        const cancelButton = document.getElementById("cancelButton");
+
+        // 회원 탈퇴 버튼 클릭 시 모달 표시
+        deleteButton.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // 모달 닫기 버튼 클릭 시 모달 숨기기
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // 아니오 버튼 클릭 시 모달 숨기기 및 마이페이지로 돌아가기
+        cancelButton.onclick = function() {
+            modal.style.display = "none";
+            // 현재 마이페이지로 리다이렉트
+            window.location.href = '/member/mypage';
+        }
+    </script>
+
 </body>
 </html>

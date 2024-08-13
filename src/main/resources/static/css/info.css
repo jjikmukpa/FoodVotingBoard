@@ -1,0 +1,122 @@
+body {
+    font-family: 'Black Han Sans', sans-serif;
+}
+
+.mypage_title {
+    font-size: 3em;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.mypage_container {
+    margin-top: 5%; /* 콘텐츠 상단 여백을 줄임 */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.mypage_left {
+    text-align: center;
+    margin-right: 20px;
+}
+
+.image-upload {
+    margin-bottom: 10px;
+}
+
+.image-label {
+    display: inline-block;
+    margin-top: 3%;
+    padding: 10px 15px;
+    background-color: #f9ed89;
+    border: 1px solid #f7eb88;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.image-preview{
+    margin-top: 13%;
+
+}
+.image-preview img {
+    width: 200px; /* 이미지 크기 조정 */
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover; /* 이미지 비율 유지 */
+    display: block;
+    margin-top: 10px;
+}
+
+.image-label {
+    background-color: #f9ed89;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 15px;
+    margin-left: 3px;
+}
+
+.edit-button:hover, #nikEditBtn:hover .image-label:hover, .submit-button:hover, .reset-button:hover {
+    background-color: #d3f8ff;
+}
+
+.mypage_right {
+    margin-left: 3%;
+    width: 500px;
+    text-decoration: none;
+}
+
+.edit-button{
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 0.8em;
+    background-color: #f9ed89;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 15px;
+    width: 800px;
+    height: 500px;
+}
+
+#rePw{
+    font-size: 0.8em;
+    font-family: 'Black Han Sans', sans-serif;
+    text-decoration: none;
+    color: black;
+}
+#back, #save{
+    font-size: 1em;
+    font-family: 'Black Han Sans', sans-serif;
+    text-decoration: none;
+    color: black;
+}
+
+.mypage_info p {
+    padding: 4%;
+    background-color: #fdf8cc;
+    border: 1px solid #fdf8cc;
+    border-radius: 20px;
+    font-size: 1.3em;
+    margin-bottom: -2px;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    margin-bottom: 20px; /* 버튼 아래 여백 추가 */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-button, .reset-button {
+    padding: 10px 15px;
+    background-color: #f9ed89;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* 파일선택 숨기는 기능 */
+.image-upload input[type="file"] {
+    display: none;
+}

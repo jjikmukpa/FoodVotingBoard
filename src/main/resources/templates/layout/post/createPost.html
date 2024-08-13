@@ -3,20 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>음식 게시판 글쓰기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/createpost.css}"/>
+
 </head>
 <body>
-<h1>음식 게시판 글쓰기</h1>
+<header th:replace="~{/fragments/header :: header}">
+</header>
+<h1 class="title">음식 게시판 글쓰기</h1>
 
 <form th:action="@{/templates/layout/post/debatePost/create}" method="post">
-    <div>
-        <label for="postTitle">Title:</label>
-        <input type="text" id="postTitle" name="postTitle" required>
+    <div class="form-group">
+        <label for="postTitle"></label>
+        <textarea id="postTitle" name="postTitle" placeholder="제목을 입력하세요" required></textarea>
     </div>
 
-    <div>
-        <label for="content">Content:</label>
-        <input type="text" id="content" name="content" required>
+    <div class="form-group">
+        <label for="content"></label>
+        <textarea id="content" name="content" placeholder="내용을 입력하세요"  required></textarea>
     </div>
+
+    <button type="submit">임시저장</button>
     <button type="submit">저장</button>
 </form>
 </body>

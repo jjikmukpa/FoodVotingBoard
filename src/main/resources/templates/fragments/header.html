@@ -41,11 +41,11 @@
             <li><a th:href='@{/debatePost/debatePostList}'>논쟁 게시판</a></li>
             <li><a class="my_page" th:href='@{/member/mypage}'>마이페이지</a>
                 <ul id="submenu">
-                    <li><a href="#3">나의 정보</a></li>
-                    <li><a href="#4">내 게시글</a></li>
-                    <li><a href="#5">내 임시 저장 글</a></li>
-                    <li><a href="#6">내 댓글</a></li>
-                    <li><a href="#7">내 추천</a></li>
+                    <li><a th:href="@{/member/info}">나의 정보</a></li>
+                    <li><a th:href="@{/member/myPosts}">내 게시글</a></li>
+                    <li><a th:href="@{/}">내 임시 저장 글</a></li>
+                    <li><a th:href="@{/}">내 댓글</a></li>
+                    <li><a th:href="@{/}">내 추천</a></li>
                 </ul>
             </li>
         </ul>

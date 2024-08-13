@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 변경</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/changePwNotLoggedIn.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+</head>
+<body>
+    <header th:replace="~{/fragments/header :: header}"></header>
+
+    <main class="change-pw-container">
+        <div class="change-pw-div">
+            <form id="change-pw-form" th:action="@{/member/changePwNotLoggedIn}" th:method="post">
+                <input type="hidden" name="userId" id="userId" th:value="${id}"/>
+
+                <span>비밀번호 변경</span>
+                <div class="input-group">
+                    <p>안전한 비밀번호로 내 정보를 보호하세요.<br>
+                        다른 아이디/사이트에서 사용한 적 없는 비밀번호, 이전에 사용한 적 없는 비밀번호가 안전합니다.<br></p>
+                </div>
+
+                <div class="input-group2">
+                    <label for="modifiedPw">새 비밀번호</label>
+                    <input type="password" id="modifiedPw" name="modifiedPw" placeholder="변경할 비밀번호를 입력하세요.">
+                </div>
+
+                <div class="input-group2">
+                    <label for="modifiedPwConfirm">새 비밀번호 확인</label>
+                    <input type="password" id="modifiedPwConfirm" name="modifiedPwConfirm" placeholder="변경할 비밀번호를 한 번 더 입력하세요.">
+                </div>
+                <p id="messagePw" hidden></p>
+
+                <button type="button" id="change-pw-btn" disabled>확인</button>
+            </form>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // userId가 비어있을 때 어떤 아이디의 비밀번호를 변경하는지 모르므로 로그인 페이지로 이동시킴
+                const userId = document.getElementById('userId').value;
+                // const userId = userIdElement ? userIdElement.textContent.trim() : '';
+
+                if (userId === '') {
+                    alert("user id is unknown");
+                    window.location.href = '/auth/login';
+                }
+
+                function validatePasswords() {
+                    const password = document.getElementById('modifiedPw').value;
+                    const confirmPassword = document.getElementById('modifiedPwConfirm').value;
+                    const regexPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+                    const messagePw = document.getElementById('messagePw');
+                    let isValid = true;
+
+                    // 두 개의 비밀번호 필드가 모두 empty가 아닌지 확인 => Enable change-pw-btn
+                    if (password === '' || confirmPassword === '') {
+                        isValid = false;
+                        document.getElementById('change-pw-btn').disabled = true;
+                    } else if (!regexPw.test(password)) {       // 비밀번호가 regex 기준을 통과하는지 확인
+                        messagePw.textContent = "* 비밀번호는 최소 8자 이상이어야 하며, 적어도 하나의 문자, 숫자 및 특수 문자를 포함해야 합니다.";
+                        messagePw.style.color = 'red';
+                        messagePw.style.fontSize = 'small';
+                        messagePw.removeAttribute("hidden");
+                        isValid = false;
+                    } else if (password !== confirmPassword) {  // 두 개의 비밀번호 필드가 일치하는지 확인
+                        messagePw.textContent = "* 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.";
+                        messagePw.style.color = 'red';
+                        messagePw.style.fontSize = 'small';
+                        messagePw.removeAttribute("hidden");
+                        isValid = false;
+                    } else {
+                        messagePw.setAttribute("hidden", "");
+                    }
+
+                    if (isValid) {
+                        document.getElementById('change-pw-btn').disabled = false;
+                    }
+                }
+
+                // document.getElementById('modifiedPw').addEventListener('input', validatePasswords);
+                document.getElementById('modifiedPwConfirm').addEventListener('input', validatePasswords);
+
+                document.getElementById('change-pw-btn').addEventListener('click', function(event) {
+                    validatePasswords();
+
+                    const password = document.getElementById('modifiedPw').value;
+                    const confirmPassword = document.getElementById('modifiedPwConfirm').value;
+
+                    // 비밀번호 기준 모두 통과 시
+                    if (!document.getElementById('change-pw-btn').disabled && password === confirmPassword) {
+                        // document.getElementById('change-pw-form').submit();
+
+                        const formData = new FormData(document.getElementById('change-pw-form'));
+
+                        fetch('/member/changePwNotLoggedIn', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+
+                                document.getElementById('messagePw').textContent = data.error;
+                                document.getElementById('messagePw').style.color = 'red';
+                                document.getElementById('messagePw').style.fontSize = 'small';
+                                document.getElementById('messagePw').removeAttribute("hidden");
+                            } else {
+                                document.getElementById('messagePw').textContent = data.success;
+                                document.getElementById('messagePw').style.color = 'green';
+                                document.getElementById('messagePw').style.fontSize = 'small';
+                                document.getElementById('messagePw').removeAttribute("hidden");
+                                alert(data.success);
+                                window.location.href = '/auth/login';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById('messagePw').textContent = error;
+                            document.getElementById('messagePw').style.color = 'red';
+                            document.getElementById('messagePw').style.fontSize = 'small';
+                            document.getElementById('messagePw').removeAttribute("hidden");
+                        });
+                    }
+                });
+            });
+        </script>
+    </main>
+</body>
+</html>

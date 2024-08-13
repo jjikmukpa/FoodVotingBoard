@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/findId.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+</head>
+<body style="background-color: #fdcf30;">
+    <header th:replace="~{/fragments/header :: header}"></header>
+
+    <main class="find-id-container">
+        <div class="find-id-div">
+            <form id="findIdForm" th:action="@{/member/findId}" th:method="post">
+                <span>아이디 찾기</span>
+                <div class="input-group">
+                    <input type="radio" class="searchBy" name="searchBy" id="findByPhoneNum" value="phone" onclick="toggleInputs()">
+                    <label for="findByPhoneNum">회원정보에 등록된 휴대전화 인증</label>
+                    <p>회원정보에 등록한 휴대전화 번호와 입력한 휴대전화 번호가 같아야 인증번호를 받을 수 있습니다.</p>
+                </div>
+
+                <div id="phoneInputs" style="display: none;">
+                    <div class="input-group2">
+                        <label for="name">이름</label>
+                        <input type="text" id="name" name="name1" placeholder="이름">
+                    </div>
+
+                    <div class="input-group2">
+                        <label for="phone">휴대전화</label>
+                        <input type="text" id="phone" name="phone" placeholder="휴대전화 번호 입력">
+                        <button type="button" id="verify-phone-btn" disabled>인증번호 받기</button>
+                    </div>
+
+                    <div id="phoneAuthGroup" class="input-group2" style="display: none;">
+                        <label for="authCode">인증번호</label>
+                        <input type="text" id="authCode" name="authCode" placeholder="인증번호 6자리 숫자 입력">
+                        <button type="button" id="auth-phone-btn" disabled>확인</button>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top: 60px;">
+                    <input type="radio" class="searchBy" name="searchBy" id="findByEmail" value="email" onclick="toggleInputs()">
+                    <label for="findByEmail">본인확인 이메일로 인증</label>
+                    <p>본인확인 이메일 주소로 인증번호를 받습니다.</p>
+                </div>
+
+                <div id="emailInputs" style="display: none;">
+                    <div class="input-group2">
+                        <label for="name2">이름</label>
+                        <input type="text" id="name2" name="name2" placeholder="이름">
+                    </div>
+
+                    <div class="input-group2">
+                        <label for="email">이메일</label>
+                        <input type="text" id="email" name="email" placeholder="이메일 입력">
+                        <button type="button" id="email-button" disabled>인증번호 받기</button>
+                    </div>
+                    <p id="messageEmail" hidden></p>
+
+                    <div id="emailAuthGroup" class="input-group2" style="display: none;">
+                        <label for="authCode2">인증번호</label>
+                        <input type="text" id="authCode2" name="authCode2" placeholder="인증번호 6자리 숫자 입력">
+                        <button type="button" id="verify-button" disabled>확인</button>
+                    </div>
+                </div>
+
+                <button id="nextBtn" type="submit" disabled>다음</button>
+            </form>
+        </div>
+
+        <div id="popupOverlay" class="popup-overlay">
+            <div class="popup-content">
+                <p>회원님의 아이디는 다음과 같습니다:</p>
+                <h2 id="popupMemberId"></h2>
+                <button onclick="confirmAndRedirect()">확인</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        let emailValid = false;
+
+        $(document).ready(function() {
+            let keyCode = '';
+            $('#email-button').on('click', function(event) {
+                // event.preventDefault();
+                const email = $('#email').val();
+
+                $.ajax({
+                    url: '/sendMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: email }),
+                    success: function(response) {
+                        keyCode = response;
+                        document.getElementById('authCode2').value = '';
+
+                        alert("이메일이 전송되었습니다.");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+
+            $('#verify-button').on('click', function(event) {
+                // event.preventDefault();
+                var code = $('#authCode2').val();
+                var email = $('#email').val();
+
+                $.ajax({
+                    url: '/checkMail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ key: keyCode, insertKey: code, email: email }),
+                    success: function(response) {
+                        if (response) {
+                            alert("인증되었습니다.");
+                            emailValid = true;
+                        } else {
+                            emailValid = false;
+
+                            document.getElementById('verify-button').disabled = false;
+                            updateNextBtnState();
+
+                            alert("인증 번호가 다릅니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert("에러: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        function toggleInputs() {
+            const phoneInputs = document.getElementById('phoneInputs');
+            const emailInputs = document.getElementById('emailInputs');
+            const findByPhoneNum = document.getElementById('findByPhoneNum');
+            const findByEmail = document.getElementById('findByEmail');
+
+            resetInputs();
+
+            if (findByPhoneNum.checked) {
+                phoneInputs.style.display = 'block';
+                emailInputs.style.display = 'none';
+            } else if (findByEmail.checked) {
+                emailInputs.style.display = 'block';
+                phoneInputs.style.display = 'none';
+            }
+        }
+
+        function resetInputs() {
+            const inputs = document.querySelectorAll('#findIdForm input[type="text"]');
+            inputs.forEach(input => input.value = '');
+
+            document.getElementById('phoneAuthGroup').style.display = 'none';
+            document.getElementById('emailAuthGroup').style.display = 'none';
+
+            document.getElementById('verify-phone-btn').disabled = true;
+            document.getElementById('auth-phone-btn').disabled = true;
+            document.getElementById('email-button').disabled = true;
+            document.getElementById('verify-button').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        document.getElementById('verify-phone-btn').addEventListener('click', function() {
+            document.getElementById('phoneAuthGroup').style.display = 'block';
+            document.getElementById('verify-phone-btn').disabled = true;
+            updateNextBtnState();
+        });
+
+        document.getElementById('email-button').addEventListener('click', function() {
+            document.getElementById('email-button').disabled = true;
+
+            const email = document.getElementById('email').value;
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!regexEmail.test(email)) {
+                document.getElementById('messageEmail').textContent = "* 이메일 형식이 맞지 않습니다.";
+                document.getElementById('messageEmail').style.color = 'red';
+                document.getElementById('messageEmail').removeAttribute("hidden");
+                document.getElementById('emailAuthGroup').style.display = 'none';
+            } else {
+                document.getElementById('messageEmail').setAttribute("hidden", "");
+                document.getElementById('emailAuthGroup').style.display = 'block';
+            }
+
+            updateNextBtnState();
+        });
+
+        document.getElementById('auth-phone-btn').addEventListener('click', function() {
+            document.getElementById('auth-phone-btn').disabled = true;
+            updateNextBtnState();
+        });
+
+        document.getElementById('verify-button').addEventListener('click', function() {
+            document.getElementById('verify-button').disabled = true;
+            updateNextBtnState();
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            let phone = this.value.replace(/[^0-9]/g, '');
+            if (phone.length > 11) {
+                phone = phone.slice(0, 11);
+            }
+
+            if (phone.length < 4) {
+                this.value = phone;
+            } else if (phone.length < 8) {
+                this.value = phone.slice(0, 3) + '-' + phone.slice(3);
+            } else {
+                this.value = phone.slice(0, 3) + '-' + phone.slice(3, 7) + '-' + phone.slice(7);
+            }
+
+            if (phone.length >= 11){
+                const inputPhone = document.getElementById('phone').value.trim();
+                document.getElementById('verify-phone-btn').disabled = inputPhone === '';
+            }
+        });
+
+        document.getElementById('authCode').addEventListener('input', function() {
+            const authCode = document.getElementById('authCode').value.trim();
+            document.getElementById('auth-phone-btn').disabled = authCode === '';
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            const email = document.getElementById('email').value.trim();
+            document.getElementById('email-button').disabled = email === '';
+        });
+
+        document.getElementById('authCode2').addEventListener('input', function() {
+            const authCode2 = document.getElementById('authCode2').value.trim();
+            document.getElementById('verify-button').disabled = authCode2 === '';
+        });
+
+        document.getElementById('name').addEventListener('input', updateNextBtnState);
+        document.getElementById('phone').addEventListener('input', updateNextBtnState);
+        document.getElementById('authCode').addEventListener('input', updateNextBtnState);
+        document.getElementById('name2').addEventListener('input', updateNextBtnState);
+        document.getElementById('email').addEventListener('input', updateNextBtnState);
+        document.getElementById('authCode2').addEventListener('input', updateNextBtnState);
+
+        function updateNextBtnState() {
+            const findByPhoneNum = document.getElementById('findByPhoneNum').checked;
+            const findByEmail = document.getElementById('findByEmail').checked;
+
+            let allFieldsFilled, allButtonsClicked;
+
+            if (findByPhoneNum) {
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const authCode = document.getElementById('authCode').value.trim();
+                const verifyPhoneBtnClicked = document.getElementById('verify-phone-btn').disabled;
+                const authPhoneBtnClicked = document.getElementById('auth-phone-btn').disabled;
+
+                allFieldsFilled = name !== '' && phone !== '' && authCode !== '';
+                allButtonsClicked = verifyPhoneBtnClicked && authPhoneBtnClicked;
+            } else if (findByEmail) {
+                const name2 = document.getElementById('name2').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const authCode2 = document.getElementById('authCode2').value.trim();
+                const verifyEmailBtnClicked = document.getElementById('email-button').disabled;
+                const authEmailBtnClicked = document.getElementById('verify-button').disabled;
+
+                allFieldsFilled = name2 !== '' && email !== '' && authCode2 !== '';
+                allButtonsClicked = verifyEmailBtnClicked && authEmailBtnClicked;
+            }
+
+            document.getElementById('nextBtn').disabled = !(allFieldsFilled && allButtonsClicked);
+        }
+
+        function confirmAndRedirect() {
+            window.location.href = '/auth/login';
+        }
+
+        document.getElementById('findIdForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/member/findId', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.memberId) {
+                        document.getElementById('popupMemberId').textContent = data.memberId;
+                        document.getElementById('popupOverlay').style.display = 'flex';
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

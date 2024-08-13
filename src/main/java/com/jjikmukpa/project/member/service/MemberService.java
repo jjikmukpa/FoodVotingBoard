@@ -3,9 +3,13 @@ package com.jjikmukpa.project.member.service;
 import com.jjikmukpa.project.member.model.dto.SignupDTO;
 import com.jjikmukpa.project.member.model.entity.Member;
 import com.jjikmukpa.project.member.model.entity.RoleType;
+import com.jjikmukpa.project.member.model.entity.Status;
 import com.jjikmukpa.project.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -32,7 +37,7 @@ public class MemberService {
                 .phone(signupDTO.getPhone())
                 .address(signupDTO.getAddress())
                 .createdDate(LocalDateTime.now())
-                .status(signupDTO.getStatus())
+                .status(Status.valueOf(signupDTO.getStatus()))  // ACTIVATED, DEACTIVATED,
                 .role(RoleType.valueOf(signupDTO.getRole()))    // USER, ADMIN
                 .build();
 
@@ -46,15 +51,95 @@ public class MemberService {
         return member;
     }
 
+    public String findMemberIdByNameAndEmail(String name, String email) {
+        Member member = memberRepository.findMemberByNameAndEmail(name, email)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and email"));
+        return member.getMemberId();
+    }
+
+    public String findMemberIdByNameAndPhone(String name, String phone) {
+        Member member = memberRepository.findMemberByNameAndPhone(name, phone)
+                .orElseThrow(() -> new NoSuchElementException("No member found with the provided name and phone"));
+        return member.getMemberId();
+    }
+
     public boolean existsMemberId(String memberId) {
         return memberRepository.existsByMemberId(memberId);
+    }
+
+    public boolean isPasswordInUse(String memberId, String rawPassword) {
+        Member member = memberRepository.findByMemberId(memberId);
+        if (member == null) {
+            return false;
+        }
+
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        return passwordEncoder.matches(rawPassword, member.getMemberPw());
     }
 
     public boolean existsNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
 
-    public boolean existsEmail(String email) { return memberRepository.existsByEmail(email); }
+    public boolean existsEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
 
-    public boolean existsPhone(String phone) { return memberRepository.existsByPhone(phone); }
+    public boolean existsPhone(String phone) {
+        return memberRepository.existsByPhone(phone);
+    }
+
+    public boolean existsByMemberIdAndNameAndEmail(String memberId, String name, String email) {
+        return memberRepository.existsByMemberIdAndNameAndEmail(memberId, name, email);
+    }
+
+    public boolean existsByMemberIdAndNameAndPhone(String memberId, String name, String phone) {
+        return memberRepository.existsByMemberIdAndNameAndPhone(memberId, name, phone);
+    }
+
+    public Status getMemberStatus(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId);
+        if (member != null) {
+            return member.getStatus();
+        }
+      
+        return Status.UNKNOWN;
+    }
+
+    public void updatePassword(String memberId, String modifiedPw) {
+//        Member member = memberRepository.findByMemberId(memberId);
+
+        String encodedPassword = passwordEncoder.encode(modifiedPw);
+        int updatedCount = memberRepository.updateMemberPwByMemberId(memberId, encodedPassword);
+
+        // 업데이트가 실행 안되었을 때
+        if (updatedCount == 0) {
+            throw new NoSuchElementException("존재하지 않는 회원입니다.");
+        }
+
+//        memberRepository.save(member);
+    }
+
+    /* mypage 작업 영역 */
+    public Member getLoggedInMember() {
+        String memberId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberRepository.findMemberByMemberId(memberId).orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+    }
+
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
+
+    public boolean checkPassword(String memberId, String rawPassword) {
+        Member member = findMemberById(memberId);
+        return passwordEncoder.matches(rawPassword, member.getMemberPw());
+    }
+
+    @Transactional
+    public void changePassword(String memberId, String newPassword) {
+        Member member = findMemberById(memberId);
+        member.setMemberPw(passwordEncoder.encode(newPassword));
+        save(member);
+    }
+
 }

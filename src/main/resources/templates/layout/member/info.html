@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 정보</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/info.css}"/>
+    <!--    공통 사용    -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/info.js}"></script>
+    <script defer th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<header th:replace="~{/fragments/header :: header}"></header>
+<h1 class="mypage_title">나의 정보</h1>
+<form id="submitForm" th:action="@{/member/mypage}" th:method="get">
+<div class="mypage_container">
+    <div class="mypage_left">
+        <div class="image-upload">
+            <input type="file" id="file1" accept="image/*" onchange="previewImage(event, 'preview1')">
+            <div class="image-preview">
+                <img id="preview1" src="/image/tears3.png" alt="Profile Picture">
+            </div>
+            <label for="file1" class="image-label">사진 수정하기</label>
+        </div>
+    </div>
+    <div class="mypage_right">
+        <div class="mypage_info">
+            <div class="mypage_menu1">
+            <p>아이디: <span th:text="${member.memberId}"></span></p>
+            </div>
+
+            <div class="mypage_menu1">
+            <p>이름: <span th:text="${member.name}"></span></p>
+            </div>
+
+            <div class="mypage_menu1">
+                <p>닉네임: <input name="re_nickname" id="re_nickname" th:value="${member.nickname}">
+                    <a class="edit-button" id="nicknameCheckButton">중복 확인</a></p>
+                <p id="messageNickname" hidden></p>
+            </div>
+
+            <div class="mypage_menu1">
+            <p>전화번호: <span th:text="${member.phone}"></span></p>
+            </div>
+
+            <div class="mypage_menu1">
+            <p>비밀번호: <span>********</span>
+                <a href="/member/changePw" class="edit-button" id="rePw">비밀번호 수정</a></p>
+            </div>
+
+
+            <div class="mypage_menu1">
+            <p>이메일: <span th:text="${member.email}"></span></p>
+            </div>
+
+            <div class="mypage_menu1">
+            <p>주소: <span th:text="${member.address}"></span> </p>
+            </div>
+
+            <div class="mypage_menu1">
+            <p>생일: <span th:text="${member.dateOfBirth}"></span></p>
+            </div>
+
+            <p>가입날짜: <span th:text="${formattedCreatedDate}"></span></p>
+        </div>
+        <div class="form-buttons">
+            <a href="/member/mypage" class="reset-button" id="back">뒤로가기</a>
+            <button class="submit-button" id="save">저장</button>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
