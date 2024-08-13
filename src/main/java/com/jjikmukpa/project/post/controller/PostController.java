@@ -8,7 +8,6 @@ import com.jjikmukpa.project.post.model.dto.CreatePostDTO;
 import com.jjikmukpa.project.post.model.dto.PostDTO;
 import com.jjikmukpa.project.post.model.entity.Post;
 import com.jjikmukpa.project.post.service.PostService;
-import com.jjikmukpa.project.reply.model.dto.ReplyDTO;
 import com.jjikmukpa.project.reply.model.entity.Reply;
 import com.jjikmukpa.project.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -179,29 +178,4 @@ public class PostController {
         return "redirect:/post/detailPost/" + postNo; // 댓글 추가 후 게시글 상세 페이지로 리디렉션
     }
 
-
-    @PostMapping("/updateReply")
-    public String updateReply(@RequestParam("replyNo") Long replyNo,
-                              @RequestParam("replyContent") String replyContent,
-                              @AuthenticationPrincipal UserDetails userDetails,
-                              Model model) {
-        // 댓글 수정 로직
-        String currentUserId = userDetails.getUsername();
-        replyService.updateReply(replyNo, replyContent);
-
-        model.addAttribute("currentUserId", currentUserId);
-        return "redirect:/post/detailPost/" + replyService.findPostNoByReplyNo(replyNo);
-    }
-
-    @GetMapping("/editReply/{replyNo}")
-    public String editReply(@PathVariable Long replyNo, Model model) {
-        log.info("🎇🎇🎇🎇🎇🎇🎇");
-        ReplyDTO replyDTO = replyService.findReplyByNo(replyNo);
-
-
-        model.addAttribute("replies", replyService.findRepliesByPostNo(replyDTO.getPost().getPostNo()));
-        model.addAttribute("replyDTO", replyDTO);
-
-        return "layout/post/detailPost";
-    }
 }
