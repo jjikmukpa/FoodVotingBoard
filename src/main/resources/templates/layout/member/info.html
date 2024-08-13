@@ -15,7 +15,7 @@
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 <h1 class="mypage_title">나의 정보</h1>
-<form id="submitForm" th:action="@{/member/register1}" th:method="post">
+<form id="submitForm" th:action="@{/member/mypage}" th:method="get">
 <div class="mypage_container">
     <div class="mypage_left">
         <div class="image-upload">
@@ -37,10 +37,10 @@
             </div>
 
             <div class="mypage_menu1">
-            <p>닉네임: <input name="re_nickname" id="re_nickname" th:value="${member.nickname}">
-                <button type="button" id="nikEditBtn" hidden>중복 확인</button></p>
+                <p>닉네임: <input name="re_nickname" id="re_nickname" th:value="${member.nickname}">
+                    <a class="edit-button" id="nicknameCheckButton">중복 확인</a></p>
+                <p id="messageNickname" hidden></p>
             </div>
-            <p id="messageNickname" hidden></p>
 
             <div class="mypage_menu1">
             <p>전화번호: <span th:text="${member.phone}"></span></p>
@@ -48,7 +48,7 @@
 
             <div class="mypage_menu1">
             <p>비밀번호: <span>********</span>
-                <a href="/member/changePw" class="edit-button">비밀번호 수정</a></p>
+                <a href="/member/changePw" class="edit-button" id="rePw">비밀번호 수정</a></p>
             </div>
 
 
@@ -64,69 +64,14 @@
             <p>생일: <span th:text="${member.dateOfBirth}"></span></p>
             </div>
 
-            <p>가입날짜: <span th:text="${member.createdDate}"></span></p>
+            <p>가입날짜: <span th:text="${formattedCreatedDate}"></span></p>
         </div>
         <div class="form-buttons">
-            <a href="/member/mypage" class="reset-button">뒤로가기</a>
-            <button class="submit-button">저장</button>
+            <a href="/member/mypage" class="reset-button" id="back">뒤로가기</a>
+            <button class="submit-button" id="save">저장</button>
         </div>
     </div>
 </div>
 </form>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script>
-    let nicknameValid = false;
-
-    // nickname 중복되는지 확인
-    document.getElementById('re_nickname').addEventListener('input', function() {
-        nicknameValid = false;  // 이미 중복확인 버튼을 누른 상황에서 다시 바꾸면 다시 중복확인 필요
-
-        let nickname = document.getElementById('re_nickname').value;
-        document.getElementById('nikEditBtn').removeAttribute("hidden");
-
-        if (nickname.trim() === '') {
-            document.getElementById('nikEditBtn').setAttribute("hidden", "");
-            nicknameValid = true;
-        } else {
-            nicknameValid = false;
-        }
-    });
-
-    document.getElementById('re_nickname').addEventListener('click', function() {
-        let nickname = document.getElementById('nickname').value;
-        const memberId = document.getElementById('memberId').value; // Get the memberId value
-
-        if (nickname.trim() === '') {
-            nickname = memberId;
-            document.getElementById('nickname').value = nickname;
-        } else {
-            fetch(`/member/nikEditBtn?nickname=${encodeURIComponent(nickname)}`)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('===== Network error =====');
-                    }
-
-                    return res.json();
-                })
-                .then(data => {
-                    if (data.exists) {
-                        document.getElementById('messageNickname').textContent = "중복되는 닉네임입니다.";
-                        document.getElementById('messageNickname').style.color = 'red';
-                        document.getElementById('messageNickname').removeAttribute("hidden");
-
-                        nicknameValid = false;
-                    } else {
-                        document.getElementById('messageNickname').textContent = "사용 가능한 닉네임입니다.";
-                        document.getElementById('messageNickname').style.color = 'green';
-                        document.getElementById('messageNickname').removeAttribute("hidden");
-
-                        nicknameValid = true;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    });
-</script>
 </body>
 </html>

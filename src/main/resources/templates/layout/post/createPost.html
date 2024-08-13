@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>음식 게시판 글쓰기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
 </head>
 <body>
+    <div><header th:replace="~{/fragments/header :: header}"></header></div>
+
 <h1>음식 게시판 글쓰기</h1>
 
 <form th:action="@{/templates/layout/post/debatePost/create}" method="post">

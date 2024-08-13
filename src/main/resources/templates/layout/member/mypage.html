@@ -22,7 +22,7 @@
             <a th:href="@{/member/info}">나의 정보</a><br>
         </div>
         <div class="mypage_menu1">
-            <a th:href="@{/}">내 게시글</a><br>
+            <a th:href="@{/member/myPosts}">내 게시글</a><br>
         </div>
         <div class="mypage_menu1">
             <a th:href="@{/}">내 임시 저장 글</a><br>
@@ -82,13 +82,6 @@
             // 현재 마이페이지로 리다이렉트
             window.location.href = '/member/mypage';
         }
-
-        // // 모달 바깥을 클릭하면 모달 숨기기
-        // window.onclick = function(event) {
-        //     if (event.target === modal) {
-        //         modal.style.display = "none";
-        //     }
-        // }
     </script>
 
 </body>
