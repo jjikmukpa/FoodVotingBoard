@@ -32,7 +32,7 @@ public class DebatePostService {
     private final ModelMapper modelMapper;
     private final String UPLOAD_DIR = "src/main/resource/static/uploads";
 
-    public void createDebatePost(CreateDebatePostDTO debatePostDTO, Member member){
+    public void createDebatePost(CreateDebatePostDTO debatePostDTO, Member member) {
 
         DebatePost debatepost = DebatePost.builder()
                 .postTitle(debatePostDTO.getDebatePostTitle())
@@ -113,5 +113,14 @@ public class DebatePostService {
                 .orElseThrow(() -> new ResourceNotFoundException("게시물을 찾을 수 없습니다."));
         debatePost.incrementPostCount();
         debatepostRepository.save(debatePost);
+    }
+
+    public Page<DebatePostDTO> findDebatePostsByMember(Member member, Pageable pageable) {
+        Page<DebatePost> debatePostList = debatepostRepository.findByMember(member, pageable);
+        return debatePostList.map(debatePost -> {
+            DebatePostDTO debatePostDTO = modelMapper.map(debatePost, DebatePostDTO.class);
+            debatePostDTO.setDebatePostDate(debatePost.getCreatedDate()); // Set debatePostDate
+            return debatePostDTO;
+        });
     }
 }

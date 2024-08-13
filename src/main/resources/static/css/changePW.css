@@ -1,0 +1,126 @@
+body {
+    font-family: 'Black Han Sans', sans-serif;
+    background-color: #FFE600;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header-container {
+    flex: 0 1 auto;
+}
+
+.content-container {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.changePw-container {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 30px 40px; /* 패딩 값을 조정하여 세로 크기를 줄임 (위아래 패딩을 20px로 줄임) */
+    width: 50%;
+    max-width: 700px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.changePw-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.changePw-div span {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 30px; /* 아래 여백을 더 줌 */
+    display: block;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 30px; /* 아래 여백을 더 줌 */
+    width: 100%;
+}
+
+.input-group p {
+    margin: 0 0 10px 0; /* 아래 여백을 더 줌 */
+    font-size: 1em;
+    color: #535353;
+}
+
+.changePw-div div {
+    margin-bottom: 30px; /* 아래 여백을 더 줌 */
+    text-align: left;
+    width: 100%;
+}
+
+.changePw-div a {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1em; /* 글자 크기를 줄임 */
+    color: #333;
+}
+
+.changePw-div input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 8px; /* 패딩을 줄임 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em; /* 글자 크기를 줄임 */
+}
+
+#afterPwError, #afterPwInvalid{
+    font-size: 0.7em;
+    color: red;
+    display: none;
+}
+
+.mypage_menu1 {
+    text-align: right;
+    width: 100%;
+}
+
+.mypage_menu1 a {
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+.mypage_menu1 a:hover {
+    text-decoration: underline;
+}
+
+button[type="submit"] {
+    background-color: #FFC300;
+    border: none;
+    padding: 12px 24px; /* 패딩을 더 줌 */
+    font-size: 1em; /* 글자 크기를 줄임 */
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button[type="submit"]:hover:enabled {
+    background-color: #FFA500;
+}
+
+.changePwText{
+    font-family: 'Black Han Sans', sans-serif;
+}
+#nowPw, #afterPw, #afterPwC{
+    font-family: 'Black Han Sans', sans-serif;
+}

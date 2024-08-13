@@ -16,6 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import com.jjikmukpa.project.post.model.dto.DebatePostDTO;
+import com.jjikmukpa.project.post.model.dto.PostDTO;
+import com.jjikmukpa.project.post.service.DebatePostService;
+import com.jjikmukpa.project.post.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jjikmukpa.project.member.model.entity.Member;
@@ -30,6 +38,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
+
+    private final PostService postService;
+    private final DebatePostService debatePostService;
     private final MemberService memberService;
 
     @GetMapping("/register")
@@ -198,6 +209,11 @@ public class MemberController {
     public String memberInfo(Model model) {
         Member member = memberService.getLoggedInMember();
         model.addAttribute("member", member);
+
+        // LocalDateTime을 String으로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedCreatedDate = member.getCreatedDate().format(formatter);
+        model.addAttribute("formattedCreatedDate", formattedCreatedDate);
         return "layout/member/info";
     }
 
@@ -224,27 +240,52 @@ public class MemberController {
         SecurityContextHolder.clearContext();
         request.getSession().invalidate();  // 세션 무효화
 
-//        // 현재 인증된 사용자 세션 무효화 및 로그아웃 처리
-//        SecurityContextHolder.clearContext();
-//        HttpSession session = request.getSession(false); // 기존 세션 가져오기
-//        if (session != null) {
-//            session.invalidate(); // 세션 무효화
-//        }
-
         // 회원 탈퇴 처리 후 홈으로 돌아가기
         return "redirect:/";
     }
 
-    @GetMapping("/re_nickname")
-    public ResponseEntity<Map<String, Boolean>> re_nickname(@RequestParam String nickname) {
-        boolean exists = memberService.existsNickname(nickname);
+    // 비밀번호 변경 페이지를 반환하는 메서드
+    @GetMapping("/changePw")
+    public String changePw() {
+        return "layout/member/changePw"; } // 뷰 파일 경로
+
+    // 비밀번호 변경 요청을 처리하는 메서드
+    @PostMapping("/changePw")
+    public String changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String nowPw,
+                                 @RequestParam String afterPw, RedirectAttributes redirectAttributes) {
+        String memberId = userDetails.getUsername();
+        if (!memberService.checkPassword(memberId, nowPw)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+            return "redirect:/member/changePw";
+        }
+
+        memberService.changePassword(memberId, afterPw);
+        return "redirect:/member/info";
+    }
+
+    // 비밀번호 확인을 위한 API 엔드포인트
+    @PostMapping("/checkPassword")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> checkPassword(@RequestBody Map<String, String> request) {
+        String memberId = SecurityContextHolder.getContext().getAuthentication().getName();
+        String nowPw = request.get("nowPw");
+        boolean valid = memberService.checkPassword(memberId, nowPw);
         Map<String, Boolean> response = new HashMap<>();
-        response.put("exists", exists);
+        response.put("valid", valid);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/changePw")
-    public String changePw() {
-        return "layout/member/changePw"; 
+    @GetMapping("/myPosts")
+    public String getMyPosts(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable, Model model) {
+        String memberId = userDetails.getUsername();
+        Member member = memberService.findMemberById(memberId);
+
+        Page<PostDTO> myPosts = postService.findPostsByMember(member, pageable);
+        Page<DebatePostDTO> myDebatePosts = debatePostService.findDebatePostsByMember(member, pageable);
+
+        model.addAttribute("postList", myPosts);
+        model.addAttribute("debatePostList", myDebatePosts);
+
+        return "layout/member/myPosts";
     }
 }
