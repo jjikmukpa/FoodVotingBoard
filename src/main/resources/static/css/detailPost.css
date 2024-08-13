@@ -1,3 +1,20 @@
+h1{
+    text-decoration: underline;
+}
+#detailPost{
+    /*display: flex;*/
+    height: 100%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+#detailPost h2{
+    text-align: left;
+}
+#name{
+
+}
+
+
 /* Modal Background */
 .modal {
     display: none;

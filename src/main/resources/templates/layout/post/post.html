@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>일반 게시판</title>
@@ -8,18 +8,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
+
 
 </head>
-
+<body>
 <header th:replace="~{/fragments/header :: header}">
 </header>
 
-<body style="background-color: #fdcf30">
-    <h1>음식 게시판</h1>
-    <button type="button" th:onclick="|location.href='@{/post/createPost}'|">글쓰기</button>
+<h1>음식 게시판</h1>
+<div class="createPost-container">
+    <button id="createPost" type="button" th:onclick="|location.href='@{/post/createPost}'|">✏글쓰기</button>
     <button class="tab" th:onclick="|location.href='@{/debatePost/debatePostList}'|">논쟁 게시판</button>
 
-    <form action="/post/postList" method="get" style="display:inline;">
+    <form id="ad" action="/post/postList" method="get" style="display:inline;">
         <input class="tab4" id="searchInput" name="search" placeholder="검색어를 입력하세요"
                th:value="${searchTerm != null ? searchTerm : ''}">
         <select name="searchType">
@@ -29,34 +31,38 @@
         </select>
         <button class="search-button" type="submit">검색</button>
     </form>
+</div>
 
-    <script>
-        function performSearch() {
-            const searchQuery = document.getElementById('searchInput').value;
-            // 검색어가 비어있지 않은 경우에만 요청
-            if (searchQuery.trim() !== "") {
-                window.location.href = '/post/postList?search=' + encodeURIComponent(searchQuery);
-            } else {
-                alert("검색어를 입력하세요.");
-            }
+
+<script>
+    function performSearch() {
+        const searchQuery = document.getElementById('searchInput').value;
+        // 검색어가 비어있지 않은 경우에만 요청
+        if (searchQuery.trim() !== "") {
+            window.location.href = '/post/postList?search=' + encodeURIComponent(searchQuery);
+        } else {
+            alert("검색어를 입력하세요.");
         }
-    </script>
+    }
+</script>
 
-<div class="listName">
-    <p>글번호</p>
-    <p>글제목</p>
-    <p>글쓴날짜</p>
-    <p>글작성자</p>
-    <p>조회수</p>
-</div>
+<table>
+    <tr>
+        <th>글번호</th>
+        <th>글제목</th>
+        <th>글쓴날짜</th>
+        <th>글작성자</th>
+        <th>조회수</th>
+    </tr>
+    <tr class="list" th:each="post : ${ postList } " th:onclick="|location.href='@{/post/detailPost/{postNo}(postNo=${post.postNo})}'|">
+        <td th:text="${ post.postNo } "></td>
+        <td th:text="${ post.postTitle } "></td>
+        <td th:text="${ post.createdDate }"></td>
+        <td th:text="${ post.member.name }"></td>
+        <td th:text="${ post.postCount}"></td>
+    </tr>
+</table>
 
-<div class="list" th:each="post : ${ postList } " th:onclick="|location.href='@{/post/detailPost/{postNo}(postNo=${post.postNo})}'|">
-    <p th:text="${ post.postNo } "></p>
-    <p th:text="${ post.postTitle } "></p>
-    <p th:text="${ post.createdDate }"></p>
-    <p th:text="${ post.member.name }"></p>
-    <p th:text="${ post.postCount}"></p>
-</div>
 
 <div id="paging">
     <!-- 맨 앞으로 이동 -->
