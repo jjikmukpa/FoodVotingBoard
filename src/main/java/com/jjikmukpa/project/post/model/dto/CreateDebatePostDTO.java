@@ -17,5 +17,4 @@ public class CreateDebatePostDTO {
     private String content;
     private Member member;
 
-
 }

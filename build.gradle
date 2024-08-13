@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.0.5'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'javax.validation:validation-api:2.0.0.Final'
+
 }
 
 tasks.named('test') {

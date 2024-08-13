@@ -5,10 +5,13 @@
     <title>논쟁 게시판</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" th:href="@{/css/debatePost.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script defer th:src="@{/js/main.js}"></script>
     <script defer th:src="@{/js/debatepost.js}"></script>
+
     <script>
         function redirectToDetail(debatePostNo) {
             window.location.href = '/debatePost/detailDebatePost/' + debatePostNo;
@@ -20,15 +23,19 @@
 </header>
 
 <div class="container">
-    <h1>논쟁 게시판</h1>
+    <h1 class="title">논쟁 게시판</h1>
+
+    <div>
     <div class="tabs">
-        <button class="tab" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>
-        <button class="tab" onclick="openTab(event, 'announcements')">공지사항</button> <!-- 공지 사항 주소 추가해야 됨-->
-        <button type="button" th:onclick="|location.href='@{/debatePost/createDebatePost}'|">✏글쓰기</button>
+        <button class="tab1" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>
+        <button class="tab2" onclick="openTab(event, 'announcements')">공지사항</button> <!-- 공지 사항 주소 추가해야 됨-->
+        <form action="/debatePost/debatePostList" method="get" style="display:inline;">
+            <input class="tab4" id="searchInput" name="search" placeholder="검색어를 입력하세요" value="">
+            <button class="search-button" type="submit">검색</button>
+        </form>
     </div>
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="검색어를 입력하세요" onkeyup="searchPosts()">
     </div>
+
     <table>
         <tr>
             <th>번호</th>
@@ -47,7 +54,7 @@
 
     </table>
 
-    <div id="paging">
+    <div class="paging">
         <!-- 맨 앞으로 이동 -->
         <button th:onclick="'location.href=\'/debatePost/debatePostList?page=' + ${ paging.startPage } + '\''"><<</button>
 
@@ -75,7 +82,6 @@
     </div>
 
 </div>
-
 
 </body>
 </html>

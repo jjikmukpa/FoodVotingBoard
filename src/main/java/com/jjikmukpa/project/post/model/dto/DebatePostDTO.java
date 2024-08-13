@@ -17,5 +17,4 @@ public class DebatePostDTO {
     private LocalDateTime debatePostDate;
     private Member member;
     private long debatePostCount;
-
 }
