@@ -12,3 +12,4 @@ function previewImage(event, previewId) {
         reader.readAsDataURL(file);
     }
 }
+
