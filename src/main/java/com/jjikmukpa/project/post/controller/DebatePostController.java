@@ -11,7 +11,6 @@ import com.jjikmukpa.project.post.service.DebatePostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,11 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.jjikmukpa.project.post.model.Option;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Controller
@@ -43,27 +38,23 @@ public class DebatePostController {
                              @RequestParam("file1") MultipartFile file1,
                              @RequestParam("file2") MultipartFile file2) {
 
+        DebatePost debatePost = new DebatePost();
+        debatePost.setPostTitle(title);
+        debatePost.setContent(content);
+
         String memberId = userDetails.getUsername();
         Member member = memberService.findMemberById(memberId);
         log.info("member : {}", member.getName());
 
-        // DebatePost 객체 생성
-        DebatePost debatePost = DebatePost.builder()
-                .postTitle(title)
-                .content(content)
-                .createdDate(LocalDateTime.now()) // 생성 일자 설정
-                .member(member)
-                .build();
+        //이미지 파일 저장
+        String imagePath1 = debatepostService.saveImage(file1);
+        String imagePath2 = debatepostService.saveImage(file2);
 
-        // 파일 저장 로직
-        String image1Path = debatepostService.saveFile(file1);
-        String image2Path = debatepostService.saveFile(file2);
+        // 이미지 경로를 게시물에 설정
+        debatePost.setImagePath1(imagePath1);
+        debatePost.setImagePath2(imagePath2);
 
-        // 이미지 경로 설정
-        Option option = new Option(image1Path, image2Path); // Option 객체 생성
-        debatePost.addOption(option); // DebatePost에 옵션 추가
-
-        // 데이터베이스에 저장
+        // 게시물 저장
         debatepostService.saveDebatePost(debatePost);
 
         debatepostService.createDebatePost(createdebatepostDTO,member);
@@ -102,13 +93,11 @@ public class DebatePostController {
     public String detailPost(@PathVariable int debatePostNo, Model model){
         debatepostService.increasePostCount(debatePostNo); // 조회수 증가
 
-
         DebatePost debatePost = debatepostService.findPostById(debatePostNo);
 
-        model.addAttribute("viewCount", debatePost.getPostCount()); // 조회수 추가
+        model.addAttribute("postCount", debatePost.getPostCount()); // 조회수 추가
         model.addAttribute("debatePost", debatePost);
         return "layout/post/debatePost/detailDebatePost";
     }
-
 
 }

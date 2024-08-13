@@ -20,11 +20,6 @@ spring:
 #      hibernate:
 #        '[format_sql]': true
 
-
-# 이미지 파일 저장 경로 설정
-file:
-  upload-dir: uploads/  # 원하는 경로로 수정 가능
-
 logging:
   level:
     root: info
