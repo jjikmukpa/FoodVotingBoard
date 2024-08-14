@@ -50,13 +50,6 @@ main {
     border-radius: 10px;
 }
 
-.option1 {
-    background-color: #f94144; /* 파스타 색상 */
-}
-
-.option2 {
-    background-color: #f3722c; /* 짬뽕 색상 */
-}
 
 .vote-count {
     font-weight: bold;

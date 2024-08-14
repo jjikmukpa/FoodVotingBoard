@@ -3,7 +3,6 @@ package com.jjikmukpa.project.post.model.entity;
 import com.jjikmukpa.project.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import com.jjikmukpa.project.post.model.Option;
 
 import java.time.LocalDateTime;
 
@@ -22,10 +21,17 @@ public class DebatePost {
     private long postNo;
 
     private String postTitle;
-
     private LocalDateTime createdDate;
 
-    private long postCount; // 조회수
+    @Column(name="imagepath1")
+    private String imagePath1; // 이미지 경로 필드
+
+    @Column(name = "imagepath2")
+    private String imagePath2; // 이미지 경로 필드
+    ;
+
+    private long postCount ; // 조회수
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_code", nullable = false)
@@ -35,22 +41,9 @@ public class DebatePost {
 
     private String blindStatus;
 
-    private String image1Path;
-    private String image2Path;
-
-    public void addOption(Option option) {
-        this.image1Path = option.getImage1();
-        this.image2Path = option.getImage2();
-    }
-
     // 조회수를 증가시키는 메소드 추가
     public void incrementPostCount() {
         this.postCount++;
-    }
-
-    // 초깃값 설정을 위한 메소드
-    public void initializeViewCount() {
-        this.postCount = 0;
     }
 
 }
