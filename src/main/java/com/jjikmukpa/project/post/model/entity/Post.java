@@ -1,11 +1,13 @@
 package com.jjikmukpa.project.post.model.entity;
 
 import com.jjikmukpa.project.member.model.entity.Member;
+import com.jjikmukpa.project.reply.model.entity.Reply;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -35,4 +37,8 @@ public class Post {
     private String content;
 
     private String blindStatus;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Reply> replies;  // 댓글 목록
+
 }

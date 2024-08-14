@@ -3,20 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>일반 게시판 상세 페이지</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/detailPost.css}">
+    <script defer th:src="@{/js/main.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}">
+</header>
 
-<button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
+<div class="page-content">
+    <h1>음식 게시판</h1>
+    <div id="detailPost">
+        <h2 th:text="${post.postTitle}">제목</h2>
+        <p id="createDate" th:text="${post.createdDate}">등록 날짜</p>
+        <p id="name"><span th:text="${post.member.name}">작성자명</span></p>
+        <p id="content" th:text="${post.content}">내용</p>
+        <p id="postCount" th:text="${post.postCount}">조회수</p>
+    </div>
 
-<div>
-    <h2 th:text ="${ post.postTitle}">제목</h2>
-    <p th:text="${post.createdDate}">등록 날짜</p>
-<!--    <p th:text="${post.modifyDate}">수정 날짜</p>-->
-<!--    <p th:text="${#dates.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></p>-->
-    <p>작성자 : <span th:text="${post.member.name}">작성자명</span></p>
-    <p th:text="${post.content}">내용</p>
+    <a id="backList" href="/post/postList">목록으로 돌아가기</a>
+
+    <h2 id="reply">댓글</h2>
+
+    <!-- 댓글 작성 폼 -->
+    <form action="/post/addReply" method="post">
+        <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+        <textarea name="replyContent" placeholder="댓글을 입력하세요"></textarea>
+        <button type="submit">댓글 달기</button>
+    </form>
+
+    <!-- 기존 댓글 목록 -->
+    <div th:each="reply : ${replies}" class="list">
+        <p th:text="${reply.member.name}">작성자</p>
+        <p th:text="${reply.replyDate}">등록 날짜</p>
+        <p id="replyContent-${reply.replyNo}" th:text="${reply.replyContent}">내용</p>
+    </div>
+
+    <div class="PostBtn" th:if="${post.member.memberId == currentUserId}">
+        <button type="button" th:onclick="|location.href='@{/post/modifyPost/{postNo}(postNo=${post.postNo})}'|">수정</button>
+        <button id="deleteBtn">삭제</button>
+    </div>
 </div>
 
-<a href="/post/postList">목록으로 돌아가기</a>
+<!-- 삭제 확인 모달 -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>이 게시글을 삭제하시겠습니까?</p>
+        <button id="alertCloseBtn" class="close-btn">확인</button>
+        <button id="cancelBtn" class="cancel-btn">취소</button>
+    </div>
+</div>
+
+<!-- 삭제 완료 모달 -->
+<div id="alertModal" class="modal">
+    <div class="modal-content">
+        <p>삭제가 완료되었습니다.</p>
+        <form id="deleteForm" th:action="@{/post/delete/{postNo}(postNo=${post.postNo})}" method="post" >
+            <button id="confirmDeleteBtn" class="confirm-btn">확인</button>
+        </form>
+        <button id="alertCancelBtn" class="cancel-btn">취소</button>
+    </div>
+</div>
+
+<script>
+    // 모달 창과 버튼들에 대한 참조
+    const confirmModal = document.getElementById("confirmModal");
+    const alertModal = document.getElementById("alertModal");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const alertCloseBtn = document.getElementById("alertCloseBtn");
+    const alertCancelBtn = document.getElementById("alertCancelBtn"); // 추가된 취소 버튼 참조
+    const deleteForm = document.getElementById("deleteForm");
+
+    // 삭제 버튼 클릭 시 모달 창 표시
+    deleteBtn.addEventListener("click", function() {
+        confirmModal.style.display = "block";
+    });
+
+    // 모달 창에서 확인 버튼 클릭 시
+    alertCloseBtn.addEventListener("click", function() {
+        confirmModal.style.display = "none";
+        // 삭제 완료 모달 표시
+        alertModal.style.display = "block";
+    });
+
+    // 취소 버튼 클릭 시 모달 창 닫기
+    cancelBtn.addEventListener("click", function() {
+        confirmModal.style.display = "none";
+    });
+
+    // 삭제 완료 모달 창에서 확인 버튼 클릭 시 페이지 리다이렉트
+    confirmDeleteBtn.addEventListener("click", function() {
+        deleteForm.submit();
+        alertModal.style.display = "none";
+        window.location.href = "/post/postList"; // 게시글 목록 페이지로 이동
+    });
+
+    // 삭제 완료 모달 창에서 취소 버튼 클릭 시 모달 창 닫기
+    alertCancelBtn.addEventListener("click", function() {
+        alertModal.style.display = "none"; // 모달 창 닫기
+    });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,183 @@
+/* detailPost.css */
+
+/* 전체 페이지 폰트 설정 */
+body {
+    font-family: 'Black Han Sans', sans-serif;
+    background-color: #fdcf30;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일링을 피하기 위해 페이지 내부를 위한 컨테이너 */
+.page-content {
+    padding-top: 20px;
+}
+
+.page-content h1 {
+    text-align: center;
+    font-size: 36px;
+    margin: 20px 0;
+}
+
+#detailPost {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto;
+    width: 60%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#detailPost h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#detailPost p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#detailPost #createDate,
+#detailPost #name,
+#detailPost #postCount {
+    color: #555;
+}
+
+.page-content a {
+    display: inline-block;
+    margin: 10px 0;
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.page-content a:hover {
+    text-decoration: underline;
+}
+
+.page-content h2 {
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+form {
+    margin-bottom: 20px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007BFF;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.close-btn, .cancel-btn, .confirm-btn {
+    background-color: #007BFF;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.close-btn:hover, .cancel-btn:hover, .confirm-btn:hover {
+    background-color: #0056b3;
+}
+
+.close-btn:active, .cancel-btn:active, .confirm-btn:active {
+    transform: scale(0.95);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list p {
+    margin: 5px 0;
+    padding: 10px;
+    width: 90%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.list p:hover {
+    background-color: #f1f1f1;
+}
+
+#reply{
+    font-family: 'Black Han Sans', sans-serif;
+    margin-left: 20%;
+}
+
+#backList{
+    font-size: 1.3em;
+    margin-left: 73%;
+}
+
+.PostBtn{
+    font-family: 'Black Han Sans', sans-serif;
+    margin-left: 73%;
+}

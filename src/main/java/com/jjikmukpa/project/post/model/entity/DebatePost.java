@@ -32,7 +32,6 @@ public class DebatePost {
 
     private long postCount ; // 조회수
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_code", nullable = false)
     private Member member;

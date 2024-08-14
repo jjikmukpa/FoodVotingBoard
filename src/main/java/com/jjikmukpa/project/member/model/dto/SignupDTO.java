@@ -19,7 +19,7 @@ public class SignupDTO {
     private String email;
     private String dateOfBirth;
     private String address;
-    private String status = "activated";
+    private String status = "ACTIVATED";
     private String role = "USER";
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

@@ -1,10 +1,7 @@
 package com.jjikmukpa.project.member.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -15,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Builder
+@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +26,14 @@ public class Member {
     private String email;
     private String address;
     private String dateOfBirth;
-    private String status = "activated";
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private LocalDateTime deletedDate;
     private LocalDateTime suspendedDate;
     private int suspensionDays;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVATED;
 
     @Enumerated(EnumType.STRING)
     private RoleType role = RoleType.USER;

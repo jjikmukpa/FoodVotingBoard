@@ -115,4 +115,13 @@ public class DebatePostService {
         debatepostRepository.save(debatePost); // DebatePost 객체를 데이터베이스에 저장
     }
 
+
+    public Page<DebatePostDTO> findDebatePostsByMember(Member member, Pageable pageable) {
+        Page<DebatePost> debatePostList = debatepostRepository.findByMember(member, pageable);
+        return debatePostList.map(debatePost -> {
+            DebatePostDTO debatePostDTO = modelMapper.map(debatePost, DebatePostDTO.class);
+            debatePostDTO.setDebatePostDate(debatePost.getCreatedDate()); // Set debatePostDate
+            return debatePostDTO;
+        });
+    }
 }

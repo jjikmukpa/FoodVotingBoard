@@ -17,5 +17,6 @@ public class PostDTO {
     private LocalDateTime createdDate;
     private LocalDateTime modifyDate;
     private Member member;
+    private long postCount;
 
 }
