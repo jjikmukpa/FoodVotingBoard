@@ -28,6 +28,7 @@
     <div>
         <div class="tabs">
             <button class="tab1" th:onclick="|location.href='@{/post/postList}'|">일반 게시판</button>
+            <button class="tab2" onclick="openTab(event, 'announcements')">공지사항</button> <!-- 공지 사항 주소 추가해야 됨-->
             <button class="tab3" th:onclick="|location.href='@{/debatePost/createDebatePost}'|">✏글쓰기</button>
             <form action="/debatePost/debatePostList" method="get" style="display:inline;">
                 <input class="tab4" id="searchInput" name="search" placeholder="검색어를 입력하세요" value="">

@@ -21,12 +21,16 @@ public class DebatePost {
     private long postNo;
 
     private String postTitle;
-
     private LocalDateTime createdDate;
 
+    @Column(name="imagepath1")
+    private String imagePath1; // 이미지 경로 필드
+
+    @Column(name = "imagepath2")
+    private String imagePath2; // 이미지 경로 필드
+    ;
 
     private long postCount ; // 조회수
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_code", nullable = false)

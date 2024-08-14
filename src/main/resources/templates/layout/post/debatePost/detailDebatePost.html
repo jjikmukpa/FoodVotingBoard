@@ -10,11 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <script defer th:src="@{/js/main.js}"></script>
+    <script defer th:src="@{/js/detaildebatepost.js}"></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}">
 </header>
-    <h1 class="title"> 논쟁게시판 </h1>
+<h1 class="title"> 논쟁게시판 </h1>
 
 <main>
     <section class="debate-board">
@@ -28,17 +29,17 @@
         <p th:text="${debatePost.content}">내용</p>
         <hr>
 
-<!--        &lt;!&ndash; 이미지 표시 &ndash;&gt;-->
-<!--        <div class="image-container">-->
-<!--            <img th:src="${debatePost.imagePath1}"  alt="게시물 이미지 1" style="max-width: 100%; height: auto;" onclick="voteImage('image1')" >-->
-<!--            <img th:src="${debatePost.imagePath2}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;" onclick="voteImage('image2')">-->
-<!--        </div>-->
+        <!-- 이미지 표시 -->
+        <div class="image-container">
+            <img th:src="${debatePost.imagePath1}"  alt="게시물 이미지 1" style="max-width: 100%; height: auto;" onclick="voteImage('image1')" >
+            <img th:src="${debatePost.imagePath2}" alt="게시물 이미지 2" style="max-width: 100%; height: auto;" onclick="voteImage('image2')">
+        </div>
 
         <!-- 투표 현황 표시 -->
         <div id="vote-container">
             <strong>현재 투표 현황:</strong><br>
-             1번: 0표<br>
-             2번: 0표
+            1번: 0표<br>
+            2번: 0표
         </div>
 
         <hr>

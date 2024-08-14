@@ -32,16 +32,33 @@ public class DebatePostController {
     private final MemberService memberService;
 
     @PostMapping("/create")
-    public String createPost(@AuthenticationPrincipal UserDetails userDetails, CreateDebatePostDTO createdebatepostDTO
-                            ) {
+    public String createPost(@AuthenticationPrincipal UserDetails userDetails, CreateDebatePostDTO createdebatepostDTO,
+                             @RequestParam("debatePostTitle") String title,
+                             @RequestParam("content") String content,
+                             @RequestParam("file1") MultipartFile file1,
+                             @RequestParam("file2") MultipartFile file2) {
 
-
+        DebatePost debatePost = new DebatePost();
+        debatePost.setPostTitle(title);
+        debatePost.setContent(content);
 
         String memberId = userDetails.getUsername();
         Member member = memberService.findMemberById(memberId);
         log.info("member : {}", member.getName());
 
-        debatepostService.createDebatePost(createdebatepostDTO,member);
+        //이미지 파일 저장
+        String imagePath1 = debatepostService.saveImage(file1);
+        String imagePath2 = debatepostService.saveImage(file2);
+
+        // 이미지 경로를 게시물에 설정
+        debatePost.setImagePath1(imagePath1); // 첫번째 이미지 경로
+        debatePost.setImagePath2(imagePath2); // 두번째 이미지 경로
+
+        // 게시물의 작성자 설정
+        debatePost.setMember(member);
+
+
+        debatepostService.saveDebatePost(debatePost); // 게시물 저장
 
         return "redirect:/debatePost/debatePostList";
     }
@@ -49,7 +66,8 @@ public class DebatePostController {
     @GetMapping("/createDebatePost")
     public String createDebatePost(){
 
-        return "layout/post/debatePost/createDebatePost"; }
+        return "layout/post/debatePost/createDebatePost";
+    }
 
     @GetMapping("/debatePostList")
     public String findAllPost(@PageableDefault Pageable pageable, String search, Model model) {
@@ -82,6 +100,13 @@ public class DebatePostController {
         model.addAttribute("postCount", debatePost.getPostCount()); // 조회수 추가
         model.addAttribute("debatePost", debatePost);
         return "layout/post/debatePost/detailDebatePost";
+    }
+
+    @GetMapping("/debatePost/{debatePostNo}")
+    public String getDebatePost(@PathVariable int debatePostNo, Model model) {
+        DebatePost debatePost = debatepostService.findPostById(debatePostNo);
+        model.addAttribute("debatePost", debatePost);
+        return "layout/post/debatePost/detailDebatePost"; // 상세 페이지의 뷰 이름
     }
 
 }

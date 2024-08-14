@@ -1,3 +1,5 @@
+let voteCounts = { image1: 0, image2: 0 };
+
 function voteImage(selectedImage) {
     // 확인 알림창
     const confirmation = confirm("투표하시겠습니까?");
