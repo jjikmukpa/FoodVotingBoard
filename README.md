@@ -61,7 +61,11 @@
 
 <h2>📂 패키지구조</h2>
 
-```
+<details>
+  <summary><b>프론트엔드 패키지 구조</b></summary>
+  <div markdown="1"> 
+
+   ```
 +---java
 |   \---com
 |       \---jjikmukpa
@@ -259,6 +263,10 @@
                         detailDebatePost.html
                         
 ```
+
+  </div>
+</details>
+
 
 <h2>📌 주요 기능</h2>
 <p>
